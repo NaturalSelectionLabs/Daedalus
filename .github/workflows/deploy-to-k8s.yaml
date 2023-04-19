@@ -1,0 +1,45 @@
+# deploy to kubernetes workflow
+name: Deploy to Kubernetes
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: "Kubectl version"
+        default: "latest"
+        required: false
+        type: string
+      cluster:
+        description: "Kubernetes cluster"
+        required: true
+        type: string
+
+env:
+  REGION_ID: us-east-1
+  DEV_ACK_CLUSTER_ID: cd1d0ffc40b5242b39ddda1864e71e30d
+  PROD_ACK_CLUSTER_ID: cfc647c22fd6848b5a602ad4d7470632b
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set Cluster ID
+        run: |
+          if [ "${{ inputs.cluster }}" == "dev" ]; then
+            echo "CLUSTER_ID=${{ env.DEV_ACK_CLUSTER_ID }}" >> $GITHUB_ENV
+          elif [ "${{ inputs.cluster }}" == "prod" ]; then
+            echo "CLUSTER_ID=${{ env.PROD_ACK_CLUSTER_ID }}" >> $GITHUB_ENV
+          fi
+      - name: Set K8S context
+        uses: aliyun/ack-set-context@v1
+        if: "${{ inputs.cluster == 'dev' }}"
+        with:
+          access-key-id: "${{ secrets.ACCESS_KEY_ID }}"
+          access-key-secret: "${{ secrets.ACCESS_KEY_SECRET }}"
+          cluster-id: "${{ env.CLUSTER_ID }}"
+      - uses: azure/setup-kubectl@v3
+        with:
+          version: ${{ inputs.version }} # default is latest stable
+        id: install
