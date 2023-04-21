@@ -12,6 +12,26 @@ on:
         description: "Kubernetes cluster"
         required: true
         type: string
+      namespace:
+        description: "Kubernetes cluster namespace"
+        required: true
+        type: string
+      images:
+        description: "The image name"
+        required: true
+        type: string
+      chart:
+        description: "Helm chart"
+        required: true
+        type: string
+      overrideFiles:
+        description: "Override files"
+        required: false
+        type: string
+      overrides:
+        description: "Override values"
+        required: false
+        type: string
 
 env:
   REGION_ID: us-east-1
@@ -21,6 +41,10 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      actions: read
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -43,3 +67,18 @@ jobs:
         with:
           version: ${{ inputs.version }} # default is latest stable
         id: install
+      - uses: azure/k8s-bake@v2.4
+        with:
+          renderEngine: helm
+          helmChart: "${{ inputs.chart }}"
+          helm-version: "latest"
+          overrideFiles: "${{ inputs.overrideFiles }}"
+          overrides: "${{ inputs.overrides }}"
+        id: bake
+
+      - name: Deploy to Kubernetes
+        uses: azure/k8s-deploy@v4
+        with:
+          namespace: "${{ inputs.namespace }}"
+          images: ${{ inputs.images }}:${{ github.sha }}
+          manifests: ${{ steps.bake.outputs.manifestsBundle }}
