@@ -10,7 +10,7 @@ import React from "react";
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
 const Job = (props: ModelProps<Partial<JobProps> | undefined>) => {
-  const [enable, setEnable] = React.useState(true);
+  const [enable, setEnable] = React.useState(false);
 
   const value = {
     uses: "NaturalSelectionLabs/Daedalus/.github/workflows/docker-tpl.yaml@main",
