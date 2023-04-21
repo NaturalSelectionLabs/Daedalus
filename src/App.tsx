@@ -37,7 +37,7 @@ function App() {
                   <Editor
                     height="90vh"
                     defaultLanguage="yaml"
-                    value={yaml.dump(action)}
+                    value={yaml.dump(action, { noCompatMode: true })}
                     options={{
                       readOnly: true,
                     }}

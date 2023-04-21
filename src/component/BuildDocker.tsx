@@ -15,7 +15,7 @@ const Job = (props: ModelProps<Partial<JobProps> | undefined>) => {
   const value = {
     uses: "NaturalSelectionLabs/Daedalus/.github/workflows/docker-tpl.yaml@main",
     with: {
-      image: "imageName",
+      images: "imageName",
       context: ".",
       dockerfile: "./Dockerfile",
     },
@@ -39,7 +39,7 @@ const Job = (props: ModelProps<Partial<JobProps> | undefined>) => {
   };
 
   const variables = props.value?.with as {
-    image: string;
+    images: string;
     context: string;
     dockerfile: string;
   };
@@ -49,7 +49,7 @@ const Job = (props: ModelProps<Partial<JobProps> | undefined>) => {
       ...props.value,
       with: {
         ...props.value?.with,
-        image: event.target.value,
+        images: event.target.value,
       },
     });
   };
@@ -86,7 +86,7 @@ const Job = (props: ModelProps<Partial<JobProps> | undefined>) => {
         <TextField
           label="Image"
           variant="outlined"
-          value={(variables || { image: "" }).image}
+          value={(variables || { images: "" }).images}
           onChange={setImage}
           disabled={!enable}
         />
