@@ -20,6 +20,10 @@ on:
         description: "The image name"
         required: true
         type: string
+      releaseName:
+        description: "The release name"
+        required: true
+        type: string
       chart:
         description: "Helm chart"
         required: true
@@ -74,6 +78,7 @@ jobs:
           helm-version: "latest"
           overrideFiles: "${{ inputs.overrideFiles }}"
           overrides: "${{ inputs.overrides }}"
+          releaseName: "${{ inputs.releaseName }}"
         id: bake
 
       - name: Deploy to Kubernetes

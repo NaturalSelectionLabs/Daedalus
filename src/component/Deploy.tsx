@@ -16,7 +16,11 @@ import React from "react";
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
 const Deploy = (
-  props: ModelProps<JobProps | undefined> & { env: string; namespace: string }
+  props: ModelProps<JobProps | undefined> & {
+    env: string;
+    namespace: string;
+    chart: string;
+  }
 ) => {
   const [enable, setEnable] = React.useState(false);
 
@@ -32,6 +36,7 @@ const Deploy = (
       images: "imageName",
       cluster: props.env,
       namespace: props.namespace,
+      chart: props.chart,
     },
     secrets: "inherit",
   };

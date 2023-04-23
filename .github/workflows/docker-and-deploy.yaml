@@ -6,10 +6,34 @@ on:
     tags:
       - v*
 jobs:
-  build-and-push:
+  build:
     uses: NaturalSelectionLabs/Daedalus/.github/workflows/docker-tpl.yaml@main
     with:
       images: rss3/daedalus
       context: .
       dockerfile: ./Dockerfile
+    secrets: inherit
+  deploy-dev:
+    uses: NaturalSelectionLabs/Daedalus/.github/workflows/deploy-tpl.yaml@main
+    needs:
+      - build
+    with:
+      images: rss3/daedalus
+      cluster: dev
+      namespace: guardian
+      chart: ./web-app/
+      releaseName: daedalus
+    secrets: inherit
+  deploy-prod:
+    if: startsWith(github.ref, 'refs/tags/v')
+    uses: NaturalSelectionLabs/Daedalus/.github/workflows/deploy-tpl.yaml@main
+    needs:
+      - build
+      - deploy-dev
+    with:
+      images: rss3/daedalus
+      cluster: prod
+      namespace: guardian
+      chart: ./web-app/
+      releaseName: daedalus
     secrets: inherit

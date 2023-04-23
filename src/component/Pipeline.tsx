@@ -16,7 +16,7 @@ import {
 const clusters = ["dev", "prod"];
 
 const namespaces = ["default", "pregod", "guardian", "tureco"];
-const charts = ["web-app"];
+const charts = ["web-app", "test"];
 
 const Pipeline = (props: ModelProps<GithubActionProps>) => {
   const setTrigger = (trigger: TriggerProps) => {
@@ -128,6 +128,7 @@ const Pipeline = (props: ModelProps<GithubActionProps>) => {
                   value={props.value.jobs[`deploy-${cluster}`]}
                   onChange={(val) => setJob(`deploy-${cluster}`, val)}
                   env={cluster}
+                  chart={`./${chart}/`}
                   namespace={namespace}
                 />
               </React.Fragment>
