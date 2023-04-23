@@ -36,6 +36,11 @@ on:
         description: "Override values"
         required: false
         type: string
+      repoUrl:
+        description: "Helm repo url"
+        required: false
+        type: string
+        default: "https://naturalselectionlabs.github.io/helm-charts"
 
 env:
   REGION_ID: us-east-1
@@ -79,6 +84,9 @@ jobs:
           overrideFiles: "${{ inputs.overrideFiles }}"
           overrides: "${{ inputs.overrides }}"
           releaseName: "${{ inputs.releaseName }}"
+          arguments: |
+            --repo
+            ${{ inputs.repoUrl }}
         id: bake
 
       - name: Deploy to Kubernetes
