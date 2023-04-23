@@ -21,7 +21,7 @@ jobs:
       images: rss3/daedalus
       cluster: dev
       namespace: guardian
-      chart: ./web-app/
+      chart: https://naturalselectionlabs.github.io/helm-charts/web-app/
       releaseName: daedalus
     secrets: inherit
   deploy-prod:
@@ -34,6 +34,6 @@ jobs:
       images: rss3/daedalus
       cluster: prod
       namespace: guardian
-      chart: ./web-app/
+      chart: https://naturalselectionlabs.github.io/helm-charts/web-app/
       releaseName: daedalus
     secrets: inherit
