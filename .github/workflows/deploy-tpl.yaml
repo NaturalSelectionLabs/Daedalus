@@ -32,6 +32,7 @@ on:
         description: "Override files"
         required: false
         type: string
+        default: values.yaml
       overrides:
         description: "Override values"
         required: false
@@ -85,7 +86,8 @@ jobs:
         run: |
           helm repo add naturalselectionlabs https://naturalselectionlabs.github.io/helm-charts
           helm repo update
-          helm template naturalselectionlabs/${{ inputs.chart }} ${{ inputs.releaseName }} -f ${{ inputs.overrideFiles }} > helm-template.yaml
+          helm template --skip-tests naturalselectionlabs/${{ inputs.chart }} ${{ inputs.releaseName }} -f ${{ inputs.overrideFiles }} > helm-template.yaml
+          cat helm-template.yaml
       # - uses: azure/k8s-bake@v2.4
       #   with:
       #     renderEngine: helm

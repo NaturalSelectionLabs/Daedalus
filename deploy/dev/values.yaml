@@ -1,0 +1,7 @@
+image:
+  repository: rss3/daedalus
+
+ingressRoute:
+  enabled: true
+  routes:
+    - Host(`daedalus.dev.nsl.xyz`)
