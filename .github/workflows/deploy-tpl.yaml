@@ -82,7 +82,7 @@ jobs:
           version: ${{ inputs.version }} # default is latest stable
         id: install
       # use helm template render yaml to template.yaml
-      - name: Deploy to Kubernetes
+      - name: Download Helm chart to local path
         run: |
           helm repo add naturalselectionlabs https://naturalselectionlabs.github.io/helm-charts
           helm repo update
@@ -102,7 +102,6 @@ jobs:
         with:
           namespace: "${{ inputs.namespace }}"
           images: ${{ inputs.images }}:${{ github.sha }}
-          # manifests: ${{ steps.bake.outputs.manifestsBundle }}
           manifests: |
-            helm-template.yaml
+            ${{ steps.bake.outputs.manifestsBundle }}
             ${{ inputs.manifests }}
