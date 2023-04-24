@@ -20,6 +20,10 @@ on:
         description: "The image name"
         required: true
         type: string
+      tag:
+        description: "The image tag"
+        required: true
+        type: string
       releaseName:
         description: "The release name"
         required: true
@@ -101,7 +105,7 @@ jobs:
         uses: azure/k8s-deploy@v4
         with:
           namespace: "${{ inputs.namespace }}"
-          images: ${{ inputs.images }}:${{ github.sha }}
+          images: ${{ inputs.images }}:${{ inputs.tag }}
           manifests: |
             ${{ steps.bake.outputs.manifestsBundle }}
             ${{ inputs.manifests }}

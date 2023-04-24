@@ -19,6 +19,7 @@ jobs:
       - build
     with:
       images: rss3/daedalus
+      tag: sha-${{ github.sha }}
       cluster: dev
       namespace: guardian
       chart: web-app
@@ -34,6 +35,7 @@ jobs:
       - deploy-dev
     with:
       images: rss3/daedalus
+      tag: ${{ github.ref }}
       cluster: prod
       namespace: guardian
       chart: web-app
