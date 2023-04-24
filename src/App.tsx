@@ -6,6 +6,7 @@ import Pipeline from "./component/Pipeline";
 import yaml from "js-yaml";
 import AppBar from "./component/AppBar";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Value from "./component/HelmValue";
 
 function App() {
   const [action, setAction] = useState<GithubActionProps>({
@@ -17,6 +18,12 @@ function App() {
       },
     },
     jobs: {},
+  });
+
+  const [value, setValue] = useState<NestedPartial<HelmValues>>({
+    image: {
+      repository: "repo/imageName",
+    },
   });
 
   return (
@@ -47,7 +54,26 @@ function App() {
             }
           ></Route>
           <Route path="dockerfile" element={<h1>Dockerfile</h1>}></Route>
-          <Route path="helm" element={<h1>Helm</h1>}></Route>
+          <Route
+            path="helm"
+            element={
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <Value value={value} onChange={setValue} />
+                </Grid>
+                <Grid item xs={6}>
+                  <Editor
+                    height="90vh"
+                    defaultLanguage="yaml"
+                    value={yaml.dump(value, { noCompatMode: true })}
+                    options={{
+                      readOnly: true,
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            }
+          ></Route>
         </Routes>
       </div>
     </Router>
