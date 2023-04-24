@@ -86,7 +86,7 @@ jobs:
         run: |
           helm repo add naturalselectionlabs https://naturalselectionlabs.github.io/helm-charts
           helm repo update
-          helm template --skip-tests naturalselectionlabs/${{ inputs.chart }} ${{ inputs.releaseName }} -f ${{ inputs.overrideFiles }} > helm-template.yaml
+          helm template --skip-tests ${{ inputs.releaseName }} naturalselectionlabs/${{ inputs.chart }} -f ${{ inputs.overrideFiles }} > helm-template.yaml
           cat helm-template.yaml
       # - uses: azure/k8s-bake@v2.4
       #   with:
