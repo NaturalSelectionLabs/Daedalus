@@ -8,7 +8,8 @@ RUN npm run build
 
 
 FROM caddy:2-alpine
-COPY --from=builder /app/build /usr/share/caddy
+COPY --from=builder /app/build /var/www/html
+COPY Caddyfile /etc/caddy/Caddyfile
 ENTRYPOINT [ "caddy" ]
 EXPOSE 80
-CMD [ "file-server", "--root", "/usr/share/caddy" ]
+CMD [ "run", "--config", "/etc/caddy/Caddyfile" , "--adapter", "caddyfile"]
