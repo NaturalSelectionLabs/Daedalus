@@ -23,6 +23,8 @@ jobs:
       namespace: guardian
       chart: web-app
       releaseName: daedalus
+      overrideFiles: |
+        deploy/dev/values.yaml
     secrets: inherit
   deploy-prod:
     if: startsWith(github.ref, 'refs/tags/v')
