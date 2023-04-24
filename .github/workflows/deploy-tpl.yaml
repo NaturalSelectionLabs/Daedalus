@@ -41,6 +41,10 @@ on:
         required: false
         type: string
         default: "https://naturalselectionlabs.github.io/helm-charts"
+      manifests:
+        description: "Manifests"
+        required: false
+        type: string
 
 env:
   REGION_ID: us-east-1
@@ -81,19 +85,23 @@ jobs:
         run: |
           helm repo add naturalselectionlabs https://naturalselectionlabs.github.io/helm-charts
           helm repo update
-      - uses: azure/k8s-bake@v2.4
-        with:
-          renderEngine: helm
-          helmChart: "naturalselectionlabs/${{ inputs.chart }}"
-          helm-version: "latest"
-          overrideFiles: "${{ inputs.overrideFiles }}"
-          overrides: "${{ inputs.overrides }}"
-          releaseName: "${{ inputs.releaseName }}"
-        id: bake
+          helm template naturalselectionlabs/${{ inputs.chart }} ${{ inputs.releaseName }} -f ${{ inputs.overrideFiles }} > helm-template.yaml
+      # - uses: azure/k8s-bake@v2.4
+      #   with:
+      #     renderEngine: helm
+      #     helmChart: "naturalselectionlabs/${{ inputs.chart }}"
+      #     helm-version: "latest"
+      #     overrideFiles: "${{ inputs.overrideFiles }}"
+      #     overrides: "${{ inputs.overrides }}"
+      #     releaseName: "${{ inputs.releaseName }}"
+      #   id: bake
 
       - name: Deploy to Kubernetes
         uses: azure/k8s-deploy@v4
         with:
           namespace: "${{ inputs.namespace }}"
           images: ${{ inputs.images }}:${{ github.sha }}
-          manifests: ${{ steps.bake.outputs.manifestsBundle }}
+          # manifests: ${{ steps.bake.outputs.manifestsBundle }}
+          manifests: |
+            helm-template.yaml
+            ${{ inputs.manifests }}
