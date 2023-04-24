@@ -76,17 +76,22 @@ jobs:
         with:
           version: ${{ inputs.version }} # default is latest stable
         id: install
+      # use helm template render yaml to template.yaml
+      - uses: azure/setup-helm@v1
+        with:
+          version: "latest"
+      - name: Add Helm repo
+        run: |
+          helm repo add naturalselectionlabs https://naturalselectionlabs.github.io/helm-charts
+          helm repo update
       - uses: azure/k8s-bake@v2.4
         with:
           renderEngine: helm
-          helmChart: "${{ inputs.chart }}"
+          helmChart: "naturalselectionlabs/${{ inputs.chart }}"
           helm-version: "latest"
           overrideFiles: "${{ inputs.overrideFiles }}"
           overrides: "${{ inputs.overrides }}"
           releaseName: "${{ inputs.releaseName }}"
-          arguments: |
-            --repo
-            ${{ inputs.repoUrl }}
         id: bake
 
       - name: Deploy to Kubernetes
