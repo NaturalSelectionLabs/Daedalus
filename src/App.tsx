@@ -9,7 +9,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function App() {
   const [action, setAction] = useState<GithubActionProps>({
-    name: "Example Action",
+    name: "Build and Deploy appName Workflow",
     on: {
       push: {
         branches: ["main"],

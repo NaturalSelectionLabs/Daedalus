@@ -6,16 +6,19 @@ import CardContent from "@mui/material/CardContent";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import React from "react";
+import { FormControl } from "@mui/material";
 
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
-const Job = (props: ModelProps<Partial<JobProps> | undefined>) => {
+const Job = (
+  props: ModelProps<Partial<JobProps> | undefined> & { images: string }
+) => {
   const [enable, setEnable] = React.useState(false);
 
   const value = {
     uses: "NaturalSelectionLabs/Daedalus/.github/workflows/docker-tpl.yaml@main",
     with: {
-      images: "imageName",
+      images: props.images,
       context: ".",
       dockerfile: "./Dockerfile",
     },
@@ -42,16 +45,6 @@ const Job = (props: ModelProps<Partial<JobProps> | undefined>) => {
     images: string;
     context: string;
     dockerfile: string;
-  };
-
-  const setImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.onChange({
-      ...props.value,
-      with: {
-        ...props.value?.with,
-        images: event.target.value,
-      },
-    });
   };
 
   const setContext = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,29 +76,24 @@ const Job = (props: ModelProps<Partial<JobProps> | undefined>) => {
         />
       </CardActions>
       <CardContent>
-        <TextField
-          label="Image"
-          variant="outlined"
-          value={(variables || { images: "" }).images}
-          onChange={setImage}
-          disabled={!enable}
-        />
-        <TextField
-          label="Context"
-          variant="outlined"
-          value={(variables || { context: "" }).context}
-          onChange={setContext}
-          helperText=" "
-          disabled={!enable}
-        />
-        <TextField
-          fullWidth
-          label="Dockerfile"
-          value={(variables || { dockerfile: "" }).dockerfile}
-          onChange={setDockerfile}
-          helperText=" "
-          disabled={!enable}
-        />
+        <FormControl fullWidth>
+          <TextField
+            label="Context"
+            variant="outlined"
+            value={(variables || { context: "" }).context}
+            onChange={setContext}
+            helperText=" "
+            disabled={!enable}
+          />
+          <TextField
+            fullWidth
+            label="Dockerfile"
+            value={(variables || { dockerfile: "" }).dockerfile}
+            onChange={setDockerfile}
+            helperText=" "
+            disabled={!enable}
+          />
+        </FormControl>
       </CardContent>
     </Card>
   );

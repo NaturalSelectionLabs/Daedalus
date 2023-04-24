@@ -9,6 +9,7 @@ import {
   SelectChangeEvent,
   FormControl,
   InputLabel,
+  TextField,
 } from "@mui/material";
 
 import React from "react";
@@ -20,6 +21,8 @@ const Deploy = (
     env: string;
     namespace: string;
     chart: string;
+    releaseName: string;
+    images: string;
   }
 ) => {
   const [enable, setEnable] = React.useState(false);
@@ -33,10 +36,13 @@ const Deploy = (
     needs: props.env === "dev" ? ["build"] : ["build", "deploy-dev"],
 
     with: {
-      images: "imageName",
+      images: props.images,
+      tag: props.env === "prod" ? "${{ github.ref }}" : "sha-${{ github.sha }}",
       cluster: props.env,
       namespace: props.namespace,
       chart: props.chart,
+      releaseName: props.releaseName,
+      overrideFiles: `deploy/${props.env}/values.yaml`,
     },
     secrets: "inherit",
   };
@@ -59,6 +65,17 @@ const Deploy = (
 
   const variables = props.value?.with as {
     namespace: string;
+    tag: string;
+  };
+
+  const setTag = (event: React.ChangeEvent<HTMLInputElement>) => {
+    props.onChange({
+      ...props.value,
+      with: {
+        ...props.value?.with,
+        tag: event.target.value,
+      },
+    });
   };
 
   return (
@@ -69,7 +86,17 @@ const Deploy = (
           label={`Deploy to ${props.env}`}
         />
       </CardActions>
-      <CardContent></CardContent>
+      <CardContent>
+        <FormControl fullWidth>
+          <TextField
+            label="Tag"
+            variant="outlined"
+            value={(variables || { tag: "" }).tag}
+            onChange={setTag}
+            disabled={!enable}
+          />
+        </FormControl>
+      </CardContent>
     </Card>
   );
 };

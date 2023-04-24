@@ -40,4 +40,6 @@ jobs:
       namespace: guardian
       chart: web-app
       releaseName: daedalus
+      overrideFiles: |
+        deploy/prod/values.yaml
     secrets: inherit
