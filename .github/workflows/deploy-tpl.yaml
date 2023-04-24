@@ -86,7 +86,7 @@ jobs:
         run: |
           helm repo add naturalselectionlabs https://naturalselectionlabs.github.io/helm-charts
           helm repo update
-          helm pull naturalselectionlabs/${{ inputs.chart }} --untar --untardir ${{ inputs.chart }}
+          helm pull naturalselectionlabs/${{ inputs.chart }} --untar
       - uses: azure/k8s-bake@v2.4
         with:
           renderEngine: helm
