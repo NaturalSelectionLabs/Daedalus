@@ -77,7 +77,7 @@ jobs:
           version: ${{ inputs.version }} # default is latest stable
         id: install
       # use helm template render yaml to template.yaml
-      - uses: azure/setup-helm@v1
+      - uses: azure/setup-helm@v3
         with:
           version: "latest"
       - name: Add Helm repo
