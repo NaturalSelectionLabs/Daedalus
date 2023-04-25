@@ -8,7 +8,12 @@ import {
   TextField,
   SelectChangeEvent,
   InputLabel,
+  CardActions,
+  FormControlLabel,
+  Switch,
 } from "@mui/material";
+import IngressRoutes from "./Routes";
+import React from "react";
 import { useState } from "react";
 
 const Value = (props: ModelProps<NestedPartial<HelmValues>>) => {
@@ -37,6 +42,29 @@ const Value = (props: ModelProps<NestedPartial<HelmValues>>) => {
     });
   };
 
+  const [ingEnabled, setIngEnabled] = useState<boolean>(false);
+
+  const handleIngressRouteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIngEnabled(e.target.checked);
+    // if true then add ingressRoute
+    // else remote ingressRoute
+    if (e.target.checked) {
+      props.onChange({
+        ...props.value,
+        ingressRoute: {
+          enabled: e.target.checked,
+          routes: [
+            "Host(`test-pregod.rss3.dev`) && PathPrefix(`/v0.4.0`) && Headers(`X-Benchmark-Request`, `1`)",
+            "Host(`test-pregod.rss3.dev`) && PathPrefix(`/v0.4.0`)",
+          ],
+        },
+      });
+    } else {
+      const { ingressRoute, ...rest } = props.value;
+      props.onChange(rest);
+    }
+  };
+
   return (
     <Container style={{ margin: "20px 0 0 20px" }} maxWidth="sm">
       <Card>
@@ -61,6 +89,30 @@ const Value = (props: ModelProps<NestedPartial<HelmValues>>) => {
               <MenuItem value="Never">Never</MenuItem>
             </Select>
           </FormControl>
+        </CardContent>
+      </Card>
+      <Card title="IngressRoute">
+        <CardActions>
+          <FormControlLabel
+            control={
+              <Switch value={ingEnabled} onChange={handleIngressRouteChange} />
+            }
+            label="Enable IngressRoute"
+          />
+        </CardActions>
+        <CardContent>
+          <IngressRoutes
+            value={props.value.ingressRoute?.routes as string[]}
+            onChange={(val) => {
+              props.onChange({
+                ...props.value,
+                ingressRoute: {
+                  ...props.value.ingressRoute,
+                  routes: val,
+                },
+              });
+            }}
+          />
         </CardContent>
       </Card>
     </Container>
