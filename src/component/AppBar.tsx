@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import HandymanIcon from "@mui/icons-material/Handyman";
+import GitHubIcon from "@mui/icons-material/GitHub";
 // import componets from @mui/material
 import {
   AppBar,
@@ -64,9 +65,13 @@ function ResponsiveAppBar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+            <Tooltip title="Github">
+              <IconButton
+                sx={{ p: 0 }}
+                href="https://github.com/NaturalSelectionLabs/Daedalus"
+                target="_blank"
+              >
+                <GitHubIcon color="action" />
               </IconButton>
             </Tooltip>
           </Box>

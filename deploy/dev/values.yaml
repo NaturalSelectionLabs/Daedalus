@@ -7,4 +7,4 @@ ingressRoute:
   routes:
     - Host(`daedalus.dev.nsl.xyz`)
   tls:
-    secretName: daedalus-tls
+    secretName: daedalus-cert
