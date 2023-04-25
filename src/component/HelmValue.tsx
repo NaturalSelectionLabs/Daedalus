@@ -11,10 +11,12 @@ import {
   CardActions,
   FormControlLabel,
   Switch,
+  CardHeader,
 } from "@mui/material";
 import IngressRoutes from "./Routes";
 import React from "react";
 import { useState } from "react";
+import MultiSelect from "./MultiSelect";
 
 const Value = (props: ModelProps<NestedPartial<HelmValues>>) => {
   const [image, setImage] = useState<string>("repo/imageName");
@@ -53,6 +55,7 @@ const Value = (props: ModelProps<NestedPartial<HelmValues>>) => {
   };
 
   const [ingEnabled, setIngEnabled] = useState<boolean>(false);
+  const [scaleEnabled, setScaleEnabled] = useState<boolean>(false);
 
   const handleIngressRouteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIngEnabled(e.target.checked);
@@ -67,6 +70,7 @@ const Value = (props: ModelProps<NestedPartial<HelmValues>>) => {
             "Host(`test-pregod.rss3.dev`) && PathPrefix(`/v0.4.0`) && Headers(`X-Benchmark-Request`, `1`)",
             "Host(`test-pregod.rss3.dev`) && PathPrefix(`/v0.4.0`)",
           ],
+          entrypoint: ["web", "websecure"],
         },
       });
     } else {
@@ -75,9 +79,28 @@ const Value = (props: ModelProps<NestedPartial<HelmValues>>) => {
     }
   };
 
+  const handleScaleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setScaleEnabled(e.target.checked);
+    if (e.target.checked) {
+      props.onChange({
+        ...props.value,
+        autoscaling: {
+          enabled: e.target.checked,
+          minReplicas: 1,
+          maxReplicas: 10,
+          targetCPUUtilizationPercentage: 80,
+        },
+      });
+    } else {
+      const { autoscaling, ...rest } = props.value;
+      props.onChange(rest);
+    }
+  };
+
   return (
     <Container style={{ margin: "20px 0 0 20px" }} maxWidth="sm">
       <Card>
+        <CardHeader title="Container" />
         <CardContent>
           <FormControl fullWidth>
             <TextField
@@ -114,17 +137,72 @@ const Value = (props: ModelProps<NestedPartial<HelmValues>>) => {
           </FormControl>
         </CardContent>
       </Card>
-      <Card title="IngressRoute">
+      <Card style={{ marginTop: "20px" }}>
+        <CardHeader title="Service" />
+        <CardContent>
+          <FormControl fullWidth>
+            <TextField
+              label="Service Port"
+              value={props.value.service?.port}
+              onChange={(e) => {
+                props.onChange({
+                  ...props.value,
+                  service: {
+                    ...props.value.service,
+                    port: parseInt(e.target.value),
+                  },
+                });
+              }}
+            />
+          </FormControl>
+          <FormControl style={{ marginTop: "20px" }} fullWidth>
+            <InputLabel>Serivce Type</InputLabel>
+            <Select
+              label="Serivce Type"
+              value={props.value.service?.type}
+              onChange={(e) => {
+                props.onChange({
+                  ...props.value,
+                  service: {
+                    ...props.value.service,
+                    type: e.target.value,
+                  },
+                });
+              }}
+            >
+              <MenuItem value="ClusterIP">ClusterIP</MenuItem>
+              <MenuItem value="NodePort">NodePort</MenuItem>
+              <MenuItem value="LoadBalancer">LoadBalancer</MenuItem>
+            </Select>
+          </FormControl>
+        </CardContent>
+      </Card>
+      <Card style={{ marginTop: "20px" }}>
+        <CardHeader title="IngressRoute" />
         <CardActions>
           <FormControlLabel
             control={
               <Switch value={ingEnabled} onChange={handleIngressRouteChange} />
             }
-            label="Enable IngressRoute"
+            label="Enable"
           />
         </CardActions>
         {ingEnabled ? (
           <CardContent>
+            <MultiSelect
+              value={props.value.ingressRoute?.entrypoint as string[]}
+              onChange={(val) => {
+                props.onChange({
+                  ...props.value,
+                  ingressRoute: {
+                    ...props.value.ingressRoute,
+                    entrypoint: val,
+                  },
+                });
+              }}
+              options={["web", "websecure"]}
+              label={"Entrypoint"}
+            />
             <IngressRoutes
               value={props.value.ingressRoute?.routes as string[]}
               onChange={(val) => {
@@ -137,6 +215,68 @@ const Value = (props: ModelProps<NestedPartial<HelmValues>>) => {
                 });
               }}
             />
+          </CardContent>
+        ) : (
+          <CardContent />
+        )}
+      </Card>
+      <Card style={{ marginTop: "20px" }}>
+        <CardHeader title="Scale" />
+        <CardActions>
+          <FormControlLabel
+            control={
+              <Switch value={scaleEnabled} onChange={handleScaleChange} />
+            }
+            label="Enable"
+          />
+        </CardActions>
+        {scaleEnabled ? (
+          <CardContent>
+            <FormControl fullWidth>
+              <TextField
+                label="MinReplicas"
+                value={props.value.autoscaling?.minReplicas}
+                onChange={(e) => {
+                  props.onChange({
+                    ...props.value,
+                    autoscaling: {
+                      ...props.value.autoscaling,
+                      minReplicas: parseInt(e.target.value),
+                    },
+                  });
+                }}
+              />
+            </FormControl>
+            <FormControl style={{ marginTop: "20px" }} fullWidth>
+              <TextField
+                label="MaxReplicas"
+                value={props.value.autoscaling?.maxReplicas}
+                onChange={(e) => {
+                  props.onChange({
+                    ...props.value,
+                    autoscaling: {
+                      ...props.value.autoscaling,
+                      maxReplicas: parseInt(e.target.value),
+                    },
+                  });
+                }}
+              />
+            </FormControl>
+            <FormControl style={{ marginTop: "20px" }} fullWidth>
+              <TextField
+                label="TargetCPUUtilizationPercentage"
+                value={props.value.autoscaling?.targetCPUUtilizationPercentage}
+                onChange={(e) => {
+                  props.onChange({
+                    ...props.value,
+                    autoscaling: {
+                      ...props.value.autoscaling,
+                      targetCPUUtilizationPercentage: parseInt(e.target.value),
+                    },
+                  });
+                }}
+              />
+            </FormControl>
           </CardContent>
         ) : (
           <CardContent />

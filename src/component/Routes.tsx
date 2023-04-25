@@ -72,7 +72,7 @@ const Routes = (props: ModelProps<string[]>) => {
           <ListItemIcon>
             <Add />
           </ListItemIcon>
-          <ListItemText primary="Add Item" />
+          <ListItemText primary="Add Routes" />
         </ListItemButton>
       </List>
     </FormControl>

@@ -30,6 +30,10 @@ function App() {
     image: {
       repository: "repo/imageName",
     },
+    service: {
+      type: "ClusterIP",
+      port: 80,
+    },
   });
 
   return (

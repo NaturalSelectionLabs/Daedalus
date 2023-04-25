@@ -41,7 +41,7 @@ const MultiSelect = (
   };
   return (
     <FormControl sx={{ m: 1, width: 300 }}>
-      <InputLabel id="demo-multiple-name-label">{props.label}</InputLabel>
+      <InputLabel>{props.label}</InputLabel>
       <Select
         labelId="demo-multiple-name-label"
         id="demo-multiple-name"
