@@ -1,3 +1,5 @@
+name: Build Docker and Push to Docker Hub
+
 on:
   workflow_call:
     inputs:

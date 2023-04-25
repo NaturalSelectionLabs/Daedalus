@@ -20,6 +20,8 @@ const Value = (props: ModelProps<NestedPartial<HelmValues>>) => {
   const [image, setImage] = useState<string>("repo/imageName");
   const [policy, setPolicy] = useState<string>("IfNotPresent");
 
+  const [replicaCount, setReplicaCount] = useState<number>(1);
+
   const handleChangeImages = (e: React.ChangeEvent<HTMLInputElement>) => {
     setImage(e.target.value);
     props.onChange({
@@ -39,6 +41,14 @@ const Value = (props: ModelProps<NestedPartial<HelmValues>>) => {
         ...props.value.image,
         pullPolicy: e.target.value,
       },
+    });
+  };
+
+  const handleChangeReplicaCount = (e: SelectChangeEvent) => {
+    setReplicaCount(parseInt(e.target.value));
+    props.onChange({
+      ...props.value,
+      replicaCount: parseInt(e.target.value),
     });
   };
 
@@ -75,9 +85,8 @@ const Value = (props: ModelProps<NestedPartial<HelmValues>>) => {
               value={image}
               onChange={handleChangeImages}
             />
-            <div style={{ marginTop: "20px" }}></div>
           </FormControl>
-          <FormControl fullWidth>
+          <FormControl style={{ marginTop: "20px" }} fullWidth>
             <InputLabel>PullPolicy</InputLabel>
             <Select
               label="PullPolicy"
@@ -87,6 +96,20 @@ const Value = (props: ModelProps<NestedPartial<HelmValues>>) => {
               <MenuItem value="Always">Always</MenuItem>
               <MenuItem value="IfNotPresent">IfNotPresent</MenuItem>
               <MenuItem value="Never">Never</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl style={{ marginTop: "20px" }} fullWidth>
+            <InputLabel>ReplicaCount</InputLabel>
+            <Select
+              label="ReplicaCount"
+              value={replicaCount.toString()}
+              onChange={handleChangeReplicaCount}
+            >
+              {[...Array(10)].map((_, i) => (
+                <MenuItem key={i} value={(i + 1).toString()}>
+                  {i + 1}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </CardContent>
