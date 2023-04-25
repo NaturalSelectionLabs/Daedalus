@@ -100,20 +100,24 @@ const Value = (props: ModelProps<NestedPartial<HelmValues>>) => {
             label="Enable IngressRoute"
           />
         </CardActions>
-        <CardContent>
-          <IngressRoutes
-            value={props.value.ingressRoute?.routes as string[]}
-            onChange={(val) => {
-              props.onChange({
-                ...props.value,
-                ingressRoute: {
-                  ...props.value.ingressRoute,
-                  routes: val,
-                },
-              });
-            }}
-          />
-        </CardContent>
+        {ingEnabled ? (
+          <CardContent>
+            <IngressRoutes
+              value={props.value.ingressRoute?.routes as string[]}
+              onChange={(val) => {
+                props.onChange({
+                  ...props.value,
+                  ingressRoute: {
+                    ...props.value.ingressRoute,
+                    routes: val,
+                  },
+                });
+              }}
+            />
+          </CardContent>
+        ) : (
+          <CardContent />
+        )}
       </Card>
     </Container>
   );

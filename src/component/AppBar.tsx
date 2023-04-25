@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import AdbIcon from "@mui/icons-material/Adb";
+import HandymanIcon from "@mui/icons-material/Handyman";
 // import componets from @mui/material
 import {
   AppBar,
@@ -19,8 +19,7 @@ import {
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 const routes: Array<{ title: string; path: string }> = [
-  { title: "Home", path: "/" },
-  { title: "Github Action", path: "/github-action" },
+  { title: "Github Action", path: "/gh-action" },
   // { title: "Dockerfile", path: "/dockerfile" },
   { title: "Helm", path: "/helm" },
 ];
@@ -33,7 +32,7 @@ function ResponsiveAppBar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          <HandymanIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -49,7 +48,7 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            Daedalus
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>

@@ -5,7 +5,13 @@ import Grid from "@mui/material/Grid";
 import Pipeline from "./component/Pipeline";
 import yaml from "js-yaml";
 import AppBar from "./component/AppBar";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  Navigate,
+} from "react-router-dom";
 import Value from "./component/HelmValue";
 
 function App() {
@@ -32,9 +38,9 @@ function App() {
         <AppBar></AppBar>
         <div style={{ height: "20px" }} />
         <Routes>
-          <Route path="/" element={<h1>Home</h1>}></Route>
+          <Route path="/" element={<Navigate to="/gh-action" />}></Route>
           <Route
-            path="/github-action"
+            path="/gh-action"
             element={
               <Grid container spacing={2}>
                 <Grid item xs={6}>
