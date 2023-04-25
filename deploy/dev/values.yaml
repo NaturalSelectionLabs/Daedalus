@@ -3,5 +3,8 @@ image:
 
 ingressRoute:
   enabled: true
+  entryPoints: ["websecure"]
   routes:
     - Host(`daedalus.dev.nsl.xyz`)
+  tls:
+    secretName: daedalus-tls
