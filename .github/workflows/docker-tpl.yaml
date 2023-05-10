@@ -17,6 +17,11 @@ on:
         required: false
         type: string
         default: ./Dockerfile
+      platforms:
+        description: "List of target platforms for build"
+        required: false
+        type: string
+        default: linux/amd64,linux/arm64,linux/arm/v7
 
 jobs:
   build-and-push:
@@ -64,6 +69,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          platforms: ${{ inputs.platforms }}
 
       - name: Docker Hub Description
         uses: peter-evans/dockerhub-description@v3
