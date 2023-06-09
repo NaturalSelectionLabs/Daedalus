@@ -76,7 +76,6 @@ jobs:
           fi
       - name: Set K8S context
         uses: aliyun/ack-set-context@v1
-        if: "${{ inputs.cluster == 'dev' }}"
         with:
           access-key-id: "${{ secrets.ACCESS_KEY_ID }}"
           access-key-secret: "${{ secrets.ACCESS_KEY_SECRET }}"
