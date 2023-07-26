@@ -10,4 +10,4 @@ ingressRoute:
     secretName: daedalus-cert
 
 org:
-  team: DevOps
+  team: devops

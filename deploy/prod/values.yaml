@@ -8,4 +8,4 @@ ingressRoute:
     - Host(`daedalus.nsl.xyz`)
 
 org:
-  team: DevOps
+  team: devops
