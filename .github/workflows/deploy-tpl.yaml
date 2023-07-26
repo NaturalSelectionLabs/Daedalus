@@ -97,7 +97,7 @@ jobs:
           helm-version: "latest"
           overrideFiles: "${{ inputs.overrideFiles }}"
           overrides: |
-            repoUrl: ${{ github.repository }}
+            repoUrl:${{ github.repository }}
             "${{ inputs.overrides }}"
           releaseName: "${{ inputs.releaseName }}"
         id: bake
