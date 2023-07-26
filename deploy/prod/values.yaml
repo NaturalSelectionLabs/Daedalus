@@ -5,9 +5,7 @@ ingressRoute:
   enabled: true
   entryPoints: ["websecure"]
   routes:
-    - Host(`daedalus.dev.nsl.xyz`)
-  tls:
-    secretName: daedalus-cert
+    - Host(`daedalus.nsl.xyz`)
 
 org:
   team: DevOps
