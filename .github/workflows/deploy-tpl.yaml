@@ -50,7 +50,11 @@ on:
         description: "Manifests"
         required: false
         type: string
-
+    secrets:
+      ACCESS_KEY_ID:
+        required: true
+      ACCESS_KEY_SECRET:
+        required: true
 env:
   REGION_ID: us-east-1
   DEV_ACK_CLUSTER_ID: cd1d0ffc40b5242b39ddda1864e71e30d

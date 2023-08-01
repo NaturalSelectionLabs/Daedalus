@@ -22,7 +22,11 @@ on:
         required: false
         type: string
         default: linux/amd64
-
+    secrets:
+      DOCKERHUB_USERNAME:
+        required: true
+      DOCKERHUB_PASSWORD:
+        required: true
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
