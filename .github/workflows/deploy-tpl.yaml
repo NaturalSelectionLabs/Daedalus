@@ -59,7 +59,6 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions: read-all
     steps:
       - name: Checkout
         uses: actions/checkout@v3
