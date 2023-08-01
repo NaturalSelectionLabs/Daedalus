@@ -59,10 +59,7 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
-      actions: read
+    permissions: read-all
     steps:
       - name: Checkout
         uses: actions/checkout@v3
