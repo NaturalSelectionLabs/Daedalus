@@ -35,7 +35,7 @@ jobs:
       - deploy-dev
     with:
       images: rss3/daedalus
-      tag: ${{ github.ref }}
+      tag: ${{ github.ref#refs/*/ }}
       cluster: prod
       namespace: guardian
       chart: web-app
