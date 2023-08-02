@@ -58,7 +58,7 @@ jobs:
           path: ${{ github.workspace }}/pkg/command/dist/
 
       - name: Untar webui
-        run: tar xvf webui.tar.gz
+        run: tar xvf ui.tar.gz
         working-directory: ./pkg/command/dist/
 
       - name: Run GoReleaser

@@ -6,9 +6,7 @@ on:
     tags:
       - v*
 jobs:
-  docker:
-    need:
-      - build
+  build:
     uses: NaturalSelectionLabs/Daedalus/.github/workflows/docker-tpl.yaml@main
     with:
       images: rss3/daedalus
@@ -18,7 +16,7 @@ jobs:
   deploy-dev:
     uses: NaturalSelectionLabs/Daedalus/.github/workflows/deploy-tpl.yaml@main
     needs:
-      - docker
+      - build
     with:
       images: rss3/daedalus
       tag: sha-${{ github.sha }}
