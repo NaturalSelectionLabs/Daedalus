@@ -1,15 +1,19 @@
 # npm dockerfile 
-FROM node:alpine as builder
+FROM golang:alpine as builder
+
 WORKDIR /app
-COPY package.json .
-RUN npm install
+
+RUN apk add --no-cache nodejs npm
+RUN npm install -g pnpm
 COPY . .
-RUN npm run build
+
+WORKDIR /app/ui
+RUN pnpm install && pnpm run build
 
 
-FROM caddy:2-alpine
-COPY --from=builder /app/build /var/www/html
-COPY Caddyfile /etc/caddy/Caddyfile
-ENTRYPOINT [ "caddy" ]
-EXPOSE 80
-CMD [ "run", "--config", "/etc/caddy/Caddyfile" , "--adapter", "caddyfile"]
+#FROM caddy:2-alpine
+#COPY --from=builder /app/build /var/www/html
+#COPY Caddyfile /etc/caddy/Caddyfile
+#ENTRYPOINT [ "caddy" ]
+#EXPOSE 80
+#CMD [ "run", "--config", "/etc/caddy/Caddyfile" , "--adapter", "caddyfile"]
