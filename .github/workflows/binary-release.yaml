@@ -1,72 +1,72 @@
-name: Release binary file
-
-on:
-  push:
-    tags:
-      - v*
-
-permissions:
-  contents: write
-
-jobs:
-  build-ui:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Install pnpm
-        run: npm install -g pnpm
-
-      - name: Build UI
-        run: pnpm install && pnpm build
-        working-directory: ./ui
-
-      - name: Tar UI
-        run: |
-          tar czvf ui.tar.gz ./pkg/command/dist
-
-      - name: Artifact webui
-        uses: actions/upload-artifact@v2
-        with:
-          name: ui.tar.gz
-          path: ui.tar.gz
-  build:
-    runs-on: ubuntu-latest
-    needs:
-      - build-ui
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - uses: actions/setup-go@v4
-        with:
-          go-version: '>=1.20.0'
-
-      - name: Artifact ui
-        uses: actions/download-artifact@v2
-        with:
-          name: ui.tar.gz
-          path: ${{ github.workspace }}/pkg/command/dist/
-
-      - name: Untar webui
-        run: tar xvf ui.tar.gz
-        working-directory: ./pkg/command/dist/
-
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v4
-        with:
-          # either 'goreleaser' (default) or 'goreleaser-pro'
-          distribution: goreleaser
-          version: latest
-          args: release --clean
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#name: Release binary file
+#
+#on:
+#  push:
+#    tags:
+#      - v*
+#
+#permissions:
+#  contents: write
+#
+#jobs:
+#  build-ui:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v2
+#        with:
+#          fetch-depth: 0
+#      - uses: actions/setup-node@v3
+#        with:
+#          node-version: 18
+#
+#      - name: Install pnpm
+#        run: npm install -g pnpm
+#
+#      - name: Build UI
+#        run: pnpm install && pnpm build
+#        working-directory: ./ui
+#
+#      - name: Tar UI
+#        run: |
+#          tar czvf ui.tar.gz ./pkg/command/dist
+#
+#      - name: Artifact webui
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: ui.tar.gz
+#          path: ui.tar.gz
+#  build:
+#    runs-on: ubuntu-latest
+#    needs:
+#      - build-ui
+#    strategy:
+#      matrix:
+#        os: [ ubuntu-latest, macos-latest, windows-latest ]
+#    steps:
+#      - name: Checkout repository
+#        uses: actions/checkout@v2
+#
+#      - uses: actions/setup-go@v4
+#        with:
+#          go-version: '>=1.20.0'
+#
+#      - name: Artifact ui
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: ui.tar.gz
+#          path: ${{ github.workspace }}/pkg/command/dist/
+#
+#      - name: Untar webui
+#        run: tar xvf ui.tar.gz
+#        working-directory: ./pkg/command/dist/
+#
+#      - name: Run GoReleaser
+#        uses: goreleaser/goreleaser-action@v4
+#        with:
+#          # either 'goreleaser' (default) or 'goreleaser-pro'
+#          distribution: goreleaser
+#          version: latest
+#          args: release --clean
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

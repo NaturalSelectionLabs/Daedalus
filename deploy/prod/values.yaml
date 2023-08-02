@@ -1,6 +1,9 @@
 image:
   repository: rss3/daedalus
 
+workload:
+  name: daedalus
+
 ingressRoute:
   enabled: true
   entryPoints: ["websecure"]
