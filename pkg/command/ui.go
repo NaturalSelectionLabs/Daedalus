@@ -3,8 +3,10 @@ package command
 import (
 	"embed"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
 	"io/fs"
+	"log"
 	"net/http"
 )
 
@@ -28,16 +30,21 @@ func init() {
 }
 
 func serveUI(port int) {
-	//http.HandleFunc("/", handleRequest)
-	http.Handle("/", http.FileServer(getFileSystem()))
+	r := gin.Default()
+	r.StaticFS("/", getFileSystem())
+	r.NoRoute(func(c *gin.Context) {
+		data, err := dist.ReadFile("dist/index.html")
+		if err != nil {
+			c.AbortWithError(http.StatusInternalServerError, err)
+			return
+		}
+		c.Data(http.StatusOK, "text/html; charset=utf-8", data)
+	})
 	addr := fmt.Sprintf(":%d", port)
 
 	fmt.Printf("Starting web server at http://localhost%s\n", addr)
 
-	err := http.ListenAndServe(addr, nil)
-	if err != nil {
-		fmt.Println("Error starting the web server:", err)
-	}
+	log.Fatal(r.Run(addr))
 }
 
 func getFileSystem() http.FileSystem {
@@ -48,34 +55,12 @@ func getFileSystem() http.FileSystem {
 	return http.FS(fsys)
 }
 
-func handleRequest(w http.ResponseWriter, r *http.Request) {
-	// Get the requested file path
-	requestedFile := r.URL.Path[1:]
+func accessLogsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Log the request details
+		log.Printf("Method: %s, URL: %s, RemoteAddr: %s\n", r.Method, r.URL.String(), r.RemoteAddr)
 
-	// Try to find the requested file in the dist folder
-	if data, err := tryFile(requestedFile); err == nil {
-		w.Header().Set("Content-Type", getContentType(requestedFile))
-		w.Write(data)
-		return
-	}
-
-	// If the requested file doesn't exist, return a 404 page or handle the error
-	http.NotFound(w, r)
-}
-
-func tryFile(filePath string) ([]byte, error) {
-	for _, file := range tryFiles {
-		fullPath := "dist/" + file
-		data, err := fs.ReadFile(dist, fullPath)
-		if err == nil {
-			return data, nil
-		}
-	}
-	return nil, fs.ErrNotExist
-}
-
-func getContentType(filePath string) string {
-	// Implement a mapping for Content-Type based on the file extension, if needed.
-	// For simplicity, this example assumes the Content-Type is always "text/html".
-	return "text/html"
+		// Call the next handler
+		next.ServeHTTP(w, r)
+	})
 }
