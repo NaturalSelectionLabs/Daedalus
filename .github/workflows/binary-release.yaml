@@ -29,7 +29,6 @@ jobs:
 
       - name: Tar UI
         run: |
-          make clean-webui generate-webui
           tar czvf ui.tar.gz ./pkg/command/dist
 
       - name: Artifact webui
