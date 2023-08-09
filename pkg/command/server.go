@@ -10,7 +10,7 @@ var (
 )
 
 var uiCmd = &cobra.Command{
-	Use:   "ui",
+	Use:   "server",
 	Short: "serve web ui",
 	Run: func(cmd *cobra.Command, args []string) {
 		server.Run(port)
