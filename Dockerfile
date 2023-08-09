@@ -22,4 +22,4 @@ FROM alpine
 COPY --from=builder /app/daedalus /daedalus
 ENTRYPOINT [ "/daedalus" ]
 EXPOSE 80
-CMD [ "ui", "--port", "80"]
+CMD [ "server", "--port", "80"]

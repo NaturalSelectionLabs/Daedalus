@@ -6,7 +6,7 @@
 /ui/.pnp.js
 /ui/build
 
-/pkg/command/dist
+/pkg/server/dist
 
 # testing
 /coverage

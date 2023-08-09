@@ -17,17 +17,18 @@ import {
   MenuItem,
 } from "@mui/material";
 
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate, useLocation } from "react-router-dom";
 
 const routes: Array<{ title: string; path: string }> = [
-  { title: "Github Action", path: "/gh-action" },
+  { title: "Github Action", path: "/ui/gh-action" },
   // { title: "Dockerfile", path: "/dockerfile" },
-  { title: "Helm", path: "/helm" },
+  { title: "Helm", path: "/ui/helm" },
 ];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <AppBar position="static">

@@ -2,6 +2,7 @@ package command
 
 import (
 	"fmt"
+	"github.com/naturalSelectionLabs/daedalus/pkg/command/convert"
 	"github.com/spf13/cobra"
 	"os"
 )
@@ -19,5 +20,9 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.AddCommand(uiCmd)
+	rootCmd.AddCommand(
+		uiCmd,
+		convert.Cmd,
+	)
+
 }

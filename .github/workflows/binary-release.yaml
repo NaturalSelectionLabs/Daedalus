@@ -29,7 +29,7 @@ jobs:
 
       - name: Tar UI
         run: |
-          tar czvf ui.tar.gz ./pkg/command/dist
+          tar czvf ui.tar.gz ./pkg/server/dist
 
       - name: Artifact webui
         uses: actions/upload-artifact@v2
@@ -55,11 +55,11 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: ui.tar.gz
-          path: ${{ github.workspace }}/pkg/command/dist/
+          path: ${{ github.workspace }}/pkg/server/dist/
 
       - name: Untar webui
         run: tar xvf ui.tar.gz
-        working-directory: ./pkg/command/dist/
+        working-directory: ./pkg/server/dist/
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v4
