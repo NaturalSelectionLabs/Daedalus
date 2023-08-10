@@ -21,8 +21,7 @@ func Execute() {
 
 func init() {
 	rootCmd.AddCommand(
-		uiCmd,
+		serverCmd,
 		convert.Cmd,
 	)
-
 }

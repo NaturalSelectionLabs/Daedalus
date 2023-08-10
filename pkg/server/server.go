@@ -20,11 +20,7 @@ func Run(port int) {
 	})
 
 	api := r.Group("/api")
-	{
-		api.GET("/aaa", func(context *gin.Context) {
-			context.String(200, "ok")
-		})
-	}
+	registerAPI(api)
 	addr := fmt.Sprintf(":%d", port)
 
 	fmt.Printf("Starting web server at http://localhost%s\n", addr)
