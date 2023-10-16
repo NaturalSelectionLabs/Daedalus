@@ -22,6 +22,11 @@ on:
         required: false
         type: string
         default: linux/amd64
+      build-args:
+        description: "Docker build args"
+        required: false
+        type: string
+        default: ""
     secrets:
       DOCKERHUB_USERNAME:
         required: true
@@ -74,6 +79,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: ${{ inputs.platforms }}
+          build-args: ${{ inputs.build-args }}
 
       - name: Docker Hub Description
         uses: peter-evans/dockerhub-description@v3
