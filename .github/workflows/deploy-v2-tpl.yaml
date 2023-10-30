@@ -37,7 +37,7 @@ on:
         description: "Override files"
         required: false
         type: string
-        default: values.yaml
+        default: ""
       overrides:
         description: "Override values"
         required: false
