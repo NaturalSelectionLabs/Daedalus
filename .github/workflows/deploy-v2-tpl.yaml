@@ -42,6 +42,11 @@ on:
         description: "Override values"
         required: false
         type: string
+      helm-chart-version:
+        description: Helm Chart version
+        required: false
+        default: x.x.x
+        type: string
       repoUrl:
         description: "Helm repo url"
         required: false
@@ -96,7 +101,8 @@ jobs:
           helm-release-name: ${{ inputs.releaseName }}
           helm-chart-url: ${{ inputs.repoUrl }}
           helm-chart-name: ${{ inputs.chart }}
-          helm-chart-version: ${{ inputs.kustomize-dir }}
+          helm-chart-version: ${{ inputs.helm-chart-version }}
+          kustomize-dir: ${{ inputs.kustomize-dir }}
 
       - name: Get the output yaml
         run: echo "${{ steps.argo-cd.outputs.app }}"
