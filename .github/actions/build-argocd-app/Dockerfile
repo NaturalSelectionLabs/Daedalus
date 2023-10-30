@@ -7,4 +7,5 @@ RUN go build
 
 FROM alpine
 COPY --from=builder /app/daedalus /daedalus
-ENTRYPOINT [ "/daedalus" ]
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]

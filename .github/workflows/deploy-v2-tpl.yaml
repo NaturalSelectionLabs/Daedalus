@@ -84,4 +84,4 @@ jobs:
           DAEDALUS_CLUSTER: ${{ inputs.cluster }}
 
       - name: Get the output yaml
-        run: echo "${{ steps.argo-cd.outputs }}"
+        run: echo "${{ steps.argo-cd.outputs.app }}"
