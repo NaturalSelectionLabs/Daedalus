@@ -80,6 +80,16 @@ export const load = (): App => {
   };
 };
 
+const plugin = (name: string, cluster: string) => ({
+  name,
+  env: [
+    {
+      name: "AVP_SECRET",
+      vault: `guardian:avp-${cluster}`,
+    },
+  ],
+});
+
 export function build(a: App) {
   const ref: any = {
     ref: "values",
@@ -101,6 +111,7 @@ export function build(a: App) {
     },
     repoURL: a.helm.chart.repoUrl,
     targetRevision: a.helm.chart.version,
+    plugin: plugin("avp-helm", a.cluster),
   };
 
   const kustomize: any = {
@@ -113,6 +124,7 @@ export function build(a: App) {
         "github.com/url": a.repo,
       },
     },
+    plugin: plugin("avp-", a.cluster),
   };
 
   const applicationSources = [];

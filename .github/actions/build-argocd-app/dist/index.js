@@ -29820,6 +29820,15 @@ const load = () => {
     };
 };
 exports.load = load;
+const plugin = (name, cluster) => ({
+    name,
+    env: [
+        {
+            name: "AVP_SECRET",
+            vault: `guardian:avp-${cluster}`,
+        },
+    ],
+});
 function build(a) {
     const ref = {
         ref: "values",
@@ -29838,6 +29847,7 @@ function build(a) {
         },
         repoURL: a.helm.chart.repoUrl,
         targetRevision: a.helm.chart.version,
+        plugin: plugin("avp-helm", a.cluster),
     };
     const kustomize = {
         repoURL: `https://github.com/${a.repo}`,
@@ -29849,6 +29859,7 @@ function build(a) {
                 "github.com/url": a.repo,
             },
         },
+        plugin: plugin("avp-", a.cluster),
     };
     const applicationSources = [];
     if (a.helm.valueFiles.length > 0) {
