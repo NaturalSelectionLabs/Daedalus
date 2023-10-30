@@ -80,7 +80,7 @@ jobs:
 
       - name: Build Argo CD Application
         id: argocd
-        uses: NaturalSelectionLabs/Daedalus@latest
+        uses: NaturalSelectionLabs/Daedalus@main
 
       - name: Get the output yaml
         run: echo "${{ steps.argocd.outouts.app }}"
