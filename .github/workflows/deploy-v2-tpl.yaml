@@ -77,7 +77,6 @@ jobs:
           version: ${{ inputs.version }} # default is latest stable
         id: install
 
-
       - name: Build Argo CD Application
         id: argo-cd
         uses: ./.github/actions/build-argocd-app
@@ -85,5 +84,4 @@ jobs:
           DAEDALUS_CLUSTER: ${{ inputs.cluster }}
 
       - name: Get the output yaml
-        run: echo "${{ steps.argo-cd.outputs.app }}"
-
+        run: echo "${{ steps.argo-cd.outputs }}"
