@@ -88,7 +88,7 @@ export function build(a: App) {
     Helm: {
       ReleaseName: a.helm.releaseName,
       ValueFiles: a.helm.valueFiles.map(
-        (item) => `$values/${valueFilePathRemovePrefix(item)}`,
+        (item) => `$values/${valueFilePathRemovePrefix(item)}`
       ),
       Parameters: [
         { Name: "image.tag", Value: a.image.tag },
@@ -124,18 +124,19 @@ export function build(a: App) {
   applicationSources.push(ref);
 
   const application = {
-    TypeMeta: {},
-    ObjectMeta: {
-      Name: `${a.name}-${a.cluster}`,
-      Namespace: "guardian",
+    apiVersion: "argoproj.io/v1alpha1",
+    kind: "Application",
+    metadata: {
+      name: `${a.name}-${a.cluster}`,
+      namespace: "guardian",
     },
-    Spec: {
-      Destination: {
-        Namespace: a.namespace,
-        Name: a.cluster,
+    spec: {
+      destination: {
+        namespace: a.namespace,
+        name: a.cluster,
       },
-      Project: a.project,
-      Sources: applicationSources,
+      project: a.project,
+      sources: applicationSources,
     },
   };
 
@@ -145,9 +146,10 @@ export function build(a: App) {
 export function toYaml(a: App): string {
   const jsonData = JSON.stringify(build(a), null, 2);
   const data = JSON.parse(jsonData);
+  console.log(yaml.dump(data));
 
-  delete data.metadata.creationTimestamp;
-  delete data.status;
+  // delete data.metadata.creationTimestamp;
+  // delete data.status;
 
   return yaml.dump(data);
 }

@@ -37,8 +37,8 @@ jobs:
   #    secrets: inherit
   deploy-v2-dev:
     uses: NaturalSelectionLabs/Daedalus/.github/workflows/deploy-v2-tpl.yaml@main
-    needs:
-      - build
+    # needs:
+    #   - build
     with:
       images: rss3/daedalus
       tag: sha-${{ github.sha }}

@@ -1,5 +1,4 @@
 import * as core from "@actions/core";
-import { wait } from "./wait";
 import * as app from "./app";
 
 /**
@@ -9,6 +8,7 @@ import * as app from "./app";
 export async function run(): Promise<void> {
   try {
     const a = app.load();
+    core.debug(JSON.stringify(a));
     core.debug(`Yaml: ${app.toYaml(a)}`);
 
     // Set outputs for other workflow steps to use
