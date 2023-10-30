@@ -88,7 +88,7 @@ export function build(a: App) {
     Helm: {
       ReleaseName: a.helm.releaseName,
       ValueFiles: a.helm.valueFiles.map(
-        (item) => `$values/${valueFilePathRemovePrefix(item)}`
+        (item) => `$values/${valueFilePathRemovePrefix(item)}`,
       ),
       Parameters: [
         { Name: "image.tag", Value: a.image.tag },
