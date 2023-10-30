@@ -21,20 +21,20 @@ jobs:
       context: .
       dockerfile: ./Dockerfile
     secrets: inherit
-  deploy-dev:
-    uses: NaturalSelectionLabs/Daedalus/.github/workflows/deploy-tpl.yaml@main
-    needs:
-      - build
-    with:
-      images: rss3/daedalus
-      tag: sha-${{ github.sha }}
-      cluster: dev
-      namespace: guardian
-      chart: web-app
-      releaseName: daedalus
-      overrideFiles: |
-        deploy/dev/values.yaml
-    secrets: inherit
+#  deploy-dev:
+#    uses: NaturalSelectionLabs/Daedalus/.github/workflows/deploy-tpl.yaml@main
+#    needs:
+#      - build
+#    with:
+#      images: rss3/daedalus
+#      tag: sha-${{ github.sha }}
+#      cluster: dev
+#      namespace: guardian
+#      chart: web-app
+#      releaseName: daedalus
+#      overrideFiles: |
+#        deploy/dev/values.yaml
+#    secrets: inherit
   deploy-v2-dev:
     uses: NaturalSelectionLabs/Daedalus/.github/workflows/deploy-v2-tpl.yaml@main
     needs:

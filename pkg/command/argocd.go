@@ -6,6 +6,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"os"
 	"strings"
 )
 
@@ -58,7 +59,7 @@ var argocdCmd = &cobra.Command{
 
 		appString := string(app.Yaml())
 		_, _ = fmt.Fprintf(cmd.OutOrStdout(), appString)
-		fmt.Printf("::set-output name=app::%s\n", appString)
+		_ = appendToEnv("GITHUB_OUTPUT", "app", appString)
 	},
 }
 
@@ -74,6 +75,12 @@ func getReleaseName() string {
 		return helmRelease
 	}
 	return name
+}
+
+func appendToEnv(env, key, content string) error {
+	currentEnv := os.Getenv(env)
+	updateEnv := currentEnv + fmt.Sprintf("%s=%s\n", key, content)
+	return os.Setenv(env, updateEnv)
 }
 
 func init() {
