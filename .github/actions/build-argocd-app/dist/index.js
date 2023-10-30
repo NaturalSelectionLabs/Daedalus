@@ -29829,7 +29829,7 @@ function build(a) {
         chart: a.helm.chart.name,
         helm: {
             releaseName: a.helm.releaseName,
-            valueFiles: a.helm.valueFiles.map((item) => `$values/${valueFilePathRemovePrefix(item)}`),
+            valueFiles: a.helm.valueFiles.map((item) => "$values/" + valueFilePathRemovePrefix(item)),
             parameters: [
                 { name: "image.tag", value: a.image.tag },
                 { name: "repoUrl", value: a.repo },

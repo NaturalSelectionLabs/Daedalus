@@ -40,6 +40,8 @@ describe("action", () => {
           return "guardian";
         case "repo":
           return "test/repo";
+        case "helm-value-files":
+          return "deploy/dev/values.yaml\ndeploy/dev/values.yaml";
         default:
           return "";
       }
