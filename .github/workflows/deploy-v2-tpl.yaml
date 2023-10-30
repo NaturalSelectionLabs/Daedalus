@@ -59,6 +59,10 @@ on:
         description: "Manifests"
         required: false
         type: string
+      revision:
+        description: "Revsion"
+        required: true
+        type: string
     secrets:
       ACCESS_KEY_ID:
         required: true
@@ -90,11 +94,11 @@ jobs:
         id: argo-cd
         uses: NaturalSelectionLabs/Daedalus/.github/actions/build-argocd-app@main
         with:
-          name: daedalus
-          namespace: guardian
-          cluster: dev
+          name: ${{ inputs.releaseName }}
+          namespace: ${{ inputs.namespace }}
+          cluster: ${{ inputs.cluster }}
           repo: ${{ github.repository }}
-          revision: main
+          revision: ${{ inputs.revision }}
           image-name: ${{ inputs.images }}
           image-tag: ${{ inputs.tag }}
           helm-value-files: ${{ inputs.overrideFiles }}
