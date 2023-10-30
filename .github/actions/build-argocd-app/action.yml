@@ -1,11 +1,19 @@
 name: "Daedalus"
 description: "Build CI"
-inputs: {}
+inputs:
+  name:
+    required: true
+    description: application name
+  namespace:
+    required: true
+    description: application namespace
+  cluster:
+    required: true
+    description: application cluster
 
 outputs:
   app: # id of output
-    description: 'Argo CD app yaml'
+    description: "Argo CD app yaml"
 runs:
-  using: docker
-  image: Dockerfile
-  args: ["argocd"]
+  using: node20
+  main: dist/index.ts
