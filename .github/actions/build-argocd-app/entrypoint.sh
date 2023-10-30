@@ -2,4 +2,4 @@
 
 yaml=$(/daedalus argocd)
 echo yaml
-echo "app=$yaml" >> $GITHUB
+echo "app=$yaml" >> $GITHUB_OUTPUT
