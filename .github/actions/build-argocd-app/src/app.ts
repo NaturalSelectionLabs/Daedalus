@@ -85,7 +85,7 @@ const plugin = (name: string, cluster: string) => ({
   env: [
     {
       name: "AVP_SECRET",
-      vault: `guardian:avp-${cluster}`,
+      value: `guardian:avp-${cluster}`,
     },
   ],
 });
@@ -124,7 +124,7 @@ export function build(a: App) {
         "github.com/url": a.repo,
       },
     },
-    plugin: plugin("avp-", a.cluster),
+    plugin: plugin("avp-kustomize", a.cluster),
   };
 
   const applicationSources = [];

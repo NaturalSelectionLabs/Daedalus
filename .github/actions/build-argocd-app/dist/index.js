@@ -29825,7 +29825,7 @@ const plugin = (name, cluster) => ({
     env: [
         {
             name: "AVP_SECRET",
-            vault: `guardian:avp-${cluster}`,
+            value: `guardian:avp-${cluster}`,
         },
     ],
 });
@@ -29859,7 +29859,7 @@ function build(a) {
                 "github.com/url": a.repo,
             },
         },
-        plugin: plugin("avp-", a.cluster),
+        plugin: plugin("avp-kustomize", a.cluster),
     };
     const applicationSources = [];
     if (a.helm.valueFiles.length > 0) {
