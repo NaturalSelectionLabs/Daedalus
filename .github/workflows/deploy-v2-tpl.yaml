@@ -30,8 +30,9 @@ on:
         type: string
       chart:
         description: "Helm chart"
-        required: true
+        required: false
         type: string
+        default: web-app
       overrideFiles:
         description: "Override files"
         required: false
@@ -46,6 +47,9 @@ on:
         required: false
         type: string
         default: "https://naturalselectionlabs.github.io/helm-charts"
+      kustomize-dir:
+        required: false
+        type: string
       manifests:
         description: "Manifests"
         required: false
@@ -89,6 +93,10 @@ jobs:
           image-name: ${{ inputs.images }}
           image-tag: ${{ inputs.tag }}
           helm-value-files: ${{ inputs.overrideFiles }}
+          helm-release-name: ${{ inputs.releaseName }}
+          helm-chart-url: ${{ inputs.repoUrl }}
+          helm-chart-name: ${{ inputs.chart }}
+          helm-chart-version: ${{ inputs.kustomize-dir }}
 
       - name: Get the output yaml
         run: echo "${{ steps.argo-cd.outputs.app }}"
