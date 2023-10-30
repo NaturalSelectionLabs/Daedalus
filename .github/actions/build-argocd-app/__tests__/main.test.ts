@@ -52,7 +52,7 @@ describe("action", () => {
     expect(setOutputMock).toHaveBeenNthCalledWith(
       1,
       "time",
-      expect.stringMatching(timeRegex)
+      expect.stringMatching(timeRegex),
     );
   });
 

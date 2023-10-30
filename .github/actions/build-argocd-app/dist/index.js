@@ -29855,18 +29855,19 @@ function build(a) {
     }
     applicationSources.push(ref);
     const application = {
-        TypeMeta: {},
-        ObjectMeta: {
-            Name: `${a.name}-${a.cluster}`,
-            Namespace: "guardian",
+        apiVersion: "argoproj.io/v1alpha1",
+        kind: "Application",
+        metadata: {
+            name: `${a.name}-${a.cluster}`,
+            namespace: "guardian",
         },
-        Spec: {
-            Destination: {
-                Namespace: a.namespace,
-                Name: a.cluster,
+        spec: {
+            destination: {
+                namespace: a.namespace,
+                name: a.cluster,
             },
-            Project: a.project,
-            Sources: applicationSources,
+            project: a.project,
+            sources: applicationSources,
         },
     };
     return application;
@@ -29875,8 +29876,9 @@ exports.build = build;
 function toYaml(a) {
     const jsonData = JSON.stringify(build(a), null, 2);
     const data = JSON.parse(jsonData);
-    delete data.metadata.creationTimestamp;
-    delete data.status;
+    console.log(yaml.dump(data));
+    // delete data.metadata.creationTimestamp;
+    // delete data.status;
     return yaml.dump(data);
 }
 exports.toYaml = toYaml;
@@ -29926,6 +29928,7 @@ const app = __importStar(__nccwpck_require__(396));
 async function run() {
     try {
         const a = app.load();
+        core.debug(JSON.stringify(a));
         core.debug(`Yaml: ${app.toYaml(a)}`);
         // Set outputs for other workflow steps to use
         core.setOutput("time", new Date().toTimeString());
