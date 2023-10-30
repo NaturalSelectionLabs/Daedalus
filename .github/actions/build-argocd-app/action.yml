@@ -10,7 +10,46 @@ inputs:
   cluster:
     required: true
     description: application cluster
-
+  project:
+    required: false
+    description: argocd project
+    default: ""
+  repo:
+    required: true
+    description: self git repo
+  revision:
+    required: true
+    description: monitor revision
+  image-name:
+    required: true
+    description: image name
+  image-tag:
+    required: true
+    description: image tag
+  helm-value-files:
+    required: false
+    description: helm values files
+    default: ""
+  helm-release-name:
+    required: false
+    description: helm release name
+    default: ""
+  helm-chart-url:
+    required: false
+    description: helm chart url
+    default: "https://naturalselectionlabs.github.io/helm-charts"
+  helm-chart-name:
+    required: false
+    description: helm chart name
+    default: "web-app"
+  helm-chart-version:
+    required: false
+    description: helm chart version
+    default: "x.x.x"
+  kustomize-dir:
+    required: false
+    description: kustomize-dir
+    default: ""
 outputs:
   app: # id of output
     description: "Argo CD app yaml"

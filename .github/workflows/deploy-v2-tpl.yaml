@@ -84,6 +84,10 @@ jobs:
           name: daedalus
           namespace: guardian
           cluster: dev
+          repo: ${{ github.repository }}
+          revision: main
+          image-name: ${{ inputs.images }}
+          image-tag: ${{ inputs.tag }}
 
       - name: Get the output yaml
         run: echo "${{ steps.argo-cd.outputs.app }}"
