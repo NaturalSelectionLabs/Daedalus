@@ -1,0 +1,87 @@
+# deploy to kubernetes workflow
+name: Deploy to Kubernetes
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: "Kubectl version"
+        default: "latest"
+        required: false
+        type: string
+      cluster:
+        description: "Kubernetes cluster"
+        required: true
+        type: string
+      namespace:
+        description: "Kubernetes cluster namespace"
+        required: true
+        type: string
+      images:
+        description: "The image name"
+        required: true
+        type: string
+      tag:
+        description: "The image tag"
+        required: true
+        type: string
+      releaseName:
+        description: "The release name"
+        required: true
+        type: string
+      chart:
+        description: "Helm chart"
+        required: true
+        type: string
+      overrideFiles:
+        description: "Override files"
+        required: false
+        type: string
+        default: values.yaml
+      overrides:
+        description: "Override values"
+        required: false
+        type: string
+      repoUrl:
+        description: "Helm repo url"
+        required: false
+        type: string
+        default: "https://naturalselectionlabs.github.io/helm-charts"
+      manifests:
+        description: "Manifests"
+        required: false
+        type: string
+    secrets:
+      ACCESS_KEY_ID:
+        required: true
+      ACCESS_KEY_SECRET:
+        required: true
+env:
+  REGION_ID: us-east-1
+  CLUSTER_ID: cfc647c22fd6848b5a602ad4d7470632b
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set K8S context
+        uses: aliyun/ack-set-context@v1
+        with:
+          access-key-id: "${{ secrets.ACCESS_KEY_ID }}"
+          access-key-secret: "${{ secrets.ACCESS_KEY_SECRET }}"
+          cluster-id: "${{ env.CLUSTER_ID }}"
+      - uses: azure/setup-kubectl@v3
+        with:
+          version: ${{ inputs.version }} # default is latest stable
+        id: install
+
+
+      - name: Build Argo CD Application
+        id: argocd
+        uses: NaturalSelectionLabs/Daedalus@latest
+
+      - name: Get the output yaml
+        run: echo "${{ steps.argocd.outouts.app }}"
+

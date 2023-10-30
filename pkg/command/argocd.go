@@ -56,7 +56,9 @@ var argocdCmd = &cobra.Command{
 			Image:     argocd.Image{},
 		}
 
-		_, _ = fmt.Fprintf(cmd.OutOrStdout(), string(app.Yaml()))
+		appString := string(app.Yaml())
+		_, _ = fmt.Fprintf(cmd.OutOrStdout(), appString)
+		fmt.Printf("::set-output name=app::%s\n", appString)
 	},
 }
 
