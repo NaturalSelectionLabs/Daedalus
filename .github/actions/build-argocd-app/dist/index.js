@@ -29775,14 +29775,17 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.toYaml = exports.build = exports.load = void 0;
 const yaml = __importStar(__nccwpck_require__(1917));
 const core = __importStar(__nccwpck_require__(2186));
-function valueFilePathRemovePrefix(inputPath) {
+const valueFilePathRemovePrefix = (inputPath) => {
     if (inputPath.startsWith("./")) {
         return inputPath.slice(2);
+    }
+    else if (inputPath.startsWith("/")) {
+        return inputPath.slice(1);
     }
     else {
         return inputPath;
     }
-}
+};
 const load = () => {
     const name = core.getInput("name");
     const namespace = core.getInput("namespace");

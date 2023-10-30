@@ -34,13 +34,15 @@ interface KustomizeApp {
   directory: string;
 }
 
-function valueFilePathRemovePrefix(inputPath: string): string {
+const valueFilePathRemovePrefix = (inputPath: string): string => {
   if (inputPath.startsWith("./")) {
     return inputPath.slice(2);
+  } else if (inputPath.startsWith("/")) {
+    return inputPath.slice(1);
   } else {
     return inputPath;
   }
-}
+};
 
 export const load = (): App => {
   const name = core.getInput("name");
