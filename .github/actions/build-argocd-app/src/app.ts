@@ -78,14 +78,14 @@ export const load = (): App => {
 
 export function build(a: App) {
   const ref: any = {
-    Ref: "values",
-    RepoURL: a.repo,
-    TargetRevision: a.revision,
+    ref: "values",
+    repoURL: a.repo,
+    targetRevision: a.revision,
   };
 
   const helm: any = {
-    Chart: a.helm.chart.name,
-    Helm: {
+    chart: a.helm.chart.name,
+    helm: {
       ReleaseName: a.helm.releaseName,
       ValueFiles: a.helm.valueFiles.map(
         (item) => `$values/${valueFilePathRemovePrefix(item)}`,
@@ -95,8 +95,8 @@ export function build(a: App) {
         { Name: "repoUrl", Value: a.repo },
       ],
     },
-    RepoURL: a.helm.chart.repoUrl,
-    TargetRevision: a.helm.chart.version,
+    repoURL: a.helm.chart.repoUrl,
+    targetRevision: a.helm.chart.version,
   };
 
   const kustomize: any = {

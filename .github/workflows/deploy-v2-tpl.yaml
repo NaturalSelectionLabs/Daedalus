@@ -88,6 +88,7 @@ jobs:
           revision: main
           image-name: ${{ inputs.images }}
           image-tag: ${{ inputs.tag }}
+          helm-value-files: ${{ inputs.overrideFiles }}
 
       - name: Get the output yaml
         run: echo "${{ steps.argo-cd.outputs.app }}"
