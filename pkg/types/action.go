@@ -2,6 +2,7 @@ package types
 
 import (
 	"bytes"
+	"github.com/samber/lo"
 	"gopkg.in/yaml.v3"
 	"strings"
 )
@@ -23,9 +24,9 @@ type Workflow struct {
 }
 
 type Jobs struct {
-	Build      Job `yaml:"build,omitempty"`
-	DeployDev  Job `yaml:"deploy-dev,omitempty"`
-	DeployProd Job `yaml:"deploy-prod,omitempty"`
+	Build      *Job `yaml:"build,omitempty"`
+	DeployDev  *Job `yaml:"deploy-dev,omitempty"`
+	DeployProd *Job `yaml:"deploy-prod,omitempty"`
 }
 
 type Job struct {
@@ -49,4 +50,94 @@ func (w Workflow) String() string {
 	encoder.SetIndent(2)
 	_ = encoder.Encode(&w)
 	return strings.ReplaceAll(buffer.String(), `"on"`, `on`)
+}
+
+func (w Workflow) Migrate(options ...FlowOption) Workflow {
+
+	newWorkflow := w.migrate()
+
+	for _, option := range options {
+		newWorkflow = option(newWorkflow)
+	}
+
+	return newWorkflow
+}
+
+func (w Workflow) migrate() (newWorkflow Workflow) {
+
+	var (
+		context    = "."
+		dockerfile = "./Dockerfile"
+	)
+
+	if buildJob := w.Jobs.Build; &buildJob == nil {
+		if pushStep, ok := lo.Find(buildJob.Steps, func(item Step) bool {
+			return strings.HasSuffix(item.Uses, "docker/build-push-action")
+		}); ok {
+			if _context, ok := pushStep.With["context"]; ok {
+				context = _context
+			}
+			if _dockerfile, ok := pushStep.With["file"]; ok {
+				dockerfile = _dockerfile
+			}
+		}
+
+	}
+
+	newWorkflow.Name = w.Name
+	newWorkflow.On = w.On
+
+	newWorkflow.Jobs = Jobs{
+		Build: &Job{
+			Step: Step{
+				Uses: "NaturalSelectionLabs/Daedalus/.github/workflows/docker-tpl.yaml@main",
+				With: map[string]string{
+					"images":     w.Env.ImageName,
+					"context":    context,
+					"dockerfile": dockerfile,
+				},
+			},
+			Secrets: map[string]string{
+				"DOCKERHUB_USERNAME": "${{ secrets.DOCKERHUB_USERNAME }}",
+				"DOCKERHUB_TOKEN":    "${{ secrets.DOCKERHUB_TOKEN }}",
+			},
+		},
+	}
+
+	if w.Jobs.DeployDev != nil {
+		newWorkflow.Jobs.DeployDev = &Job{
+			Step: Step{
+				Uses: "NaturalSelectionLabs/Daedalus/.github/workflows/deploy-tpl.yaml@main",
+				With: map[string]string{
+					"images":        w.Env.ImageName,
+					"tag":           "sha-${{ github.sha }}",
+					"cluster":       "dev",
+					"namespace":     "<namespace>",
+					"chart":         "web-app",
+					"releaseName":   "<app-name>",
+					"overrideFiles": "deploy/dev/values.yaml",
+				},
+			},
+			Needs: w.Jobs.DeployDev.Needs,
+		}
+	}
+
+	if w.Jobs.DeployProd != nil {
+		newWorkflow.Jobs.DeployProd = &Job{
+			Step: Step{
+				Uses: "NaturalSelectionLabs/Daedalus/.github/workflows/deploy-tpl.yaml@main",
+				With: map[string]string{
+					"images":        w.Env.ImageName,
+					"tag":           "sha-${{ github.sha }}",
+					"cluster":       "prod",
+					"namespace":     "<namespace>",
+					"chart":         "web-app",
+					"releaseName":   "<app-name>",
+					"overrideFiles": "deploy/prod/values.yaml",
+				},
+			},
+			Needs: w.Jobs.DeployProd.Needs,
+		}
+	}
+	return
 }

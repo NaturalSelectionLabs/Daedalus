@@ -6,7 +6,13 @@ import (
 	"gopkg.in/yaml.v3"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 )
+
+type DeployContent struct {
+	Value    HelmValue        `json:"value"`
+	Addition []runtime.Object `json:"addition"`
+}
 
 type HelmValue struct {
 	Image            Image                     `json:"image"`
@@ -77,12 +83,12 @@ func (v HelmValue) String() string {
 	var data map[string]interface{}
 
 	jsonData, _ := json.Marshal(v)
-	json.Unmarshal(jsonData, &data)
+	_ = json.Unmarshal(jsonData, &data)
 
 	var buffer bytes.Buffer
 	encoder := yaml.NewEncoder(&buffer)
 	encoder.SetIndent(2)
-	encoder.Encode(&data)
+	_ = encoder.Encode(&data)
 
 	return buffer.String()
 }

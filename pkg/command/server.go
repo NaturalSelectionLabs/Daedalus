@@ -24,5 +24,5 @@ func init() {
 	viper.BindEnv("GITHUB_TOKEN")
 	serverCmd.Flags().IntVarP(&port, "port", "p", 8080, "Port number for the web server")
 	serverCmd.Flags().StringVarP(&token, "github-token", "", viper.GetString("GITHUB_TOKEN"), "Github API access token")
-	server.InitGithubClient(token)
+	//server.InitGithubClient(token)
 }
