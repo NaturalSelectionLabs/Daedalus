@@ -51,6 +51,7 @@ export const load = (): App => {
   const project = core.getInput("project") || namespace;
   const repo = core.getInput("repo");
   const revision = core.getInput("revision");
+
   return {
     name,
     namespace,
@@ -89,7 +90,7 @@ export function build(a: App) {
     helm: {
       releaseName: a.helm.releaseName,
       valueFiles: a.helm.valueFiles.map(
-        (item) => "$values/" + valueFilePathRemovePrefix(item),
+        (item) => `\\\$values/${valueFilePathRemovePrefix(item)}`,
       ),
       parameters: [
         { name: "image.tag", value: a.image.tag },
