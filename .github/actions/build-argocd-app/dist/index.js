@@ -29816,6 +29816,7 @@ const load = () => {
             name: core.getInput("image-name"),
             tag: core.getInput("image-tag"),
         },
+        sync: core.getBooleanInput("auto-sync"),
     };
 };
 exports.load = load;
@@ -29839,7 +29840,7 @@ function build(a) {
         targetRevision: a.helm.chart.version,
     };
     const kustomize = {
-        repoURL: a.repo,
+        repoURL: `https://github.com/${a.repo}`,
         targetRevision: a.revision,
         path: a.kustomize.directory,
         kustomize: {
@@ -29871,6 +29872,10 @@ function build(a) {
             },
             project: a.project,
             sources: applicationSources,
+            syncPolicy: {
+                syncOptions: ["ApplyOutOfSyncOnly=true", "ServerSideApply=true"],
+                automated: a.sync ? {} : undefined,
+            },
         },
     };
     return application;
