@@ -81,7 +81,7 @@ export const load = (): App => {
 export function build(a: App) {
   const ref: any = {
     ref: "values",
-    repoURL: a.repo,
+    repoURL: `https://github.com/${a.repo}`,
     targetRevision: a.revision,
   };
 

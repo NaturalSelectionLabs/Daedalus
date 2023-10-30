@@ -29822,7 +29822,7 @@ exports.load = load;
 function build(a) {
     const ref = {
         ref: "values",
-        repoURL: a.repo,
+        repoURL: `https://github.com/${a.repo}`,
         targetRevision: a.revision,
     };
     const helm = {
