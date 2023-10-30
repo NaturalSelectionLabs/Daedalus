@@ -29817,18 +29817,10 @@ const load = () => {
             tag: core.getInput("image-tag"),
         },
         sync: core.getBooleanInput("auto-sync"),
+        secret: core.getBooleanInput("secret"),
     };
 };
 exports.load = load;
-const plugin = (name, cluster) => ({
-    name,
-    env: [
-        {
-            name: "AVP_SECRET",
-            value: `guardian:avp-${cluster}`,
-        },
-    ],
-});
 function build(a) {
     const ref = {
         ref: "values",
@@ -29847,7 +29839,6 @@ function build(a) {
         },
         repoURL: a.helm.chart.repoUrl,
         targetRevision: a.helm.chart.version,
-        plugin: plugin("avp-helm", a.cluster),
     };
     const kustomize = {
         repoURL: `https://github.com/${a.repo}`,
@@ -29859,7 +29850,20 @@ function build(a) {
                 "github.com/url": a.repo,
             },
         },
-        plugin: plugin("avp-kustomize", a.cluster),
+    };
+    const plugin = {
+        repoURL: `https://github.com/${a.repo}`,
+        targetRevision: a.revision,
+        path: a.kustomize.directory,
+        plugin: {
+            name: "avp",
+            env: [
+                {
+                    name: "AVP_SECRET",
+                    value: `guardian:avp-${a.cluster}`,
+                },
+            ],
+        },
     };
     const applicationSources = [];
     if (a.helm.valueFiles.length > 0) {
@@ -29868,6 +29872,9 @@ function build(a) {
     }
     if (a.kustomize.directory !== "") {
         applicationSources.push(kustomize);
+    }
+    if (a.secret) {
+        applicationSources.push(plugin);
     }
     const application = {
         apiVersion: "argoproj.io/v1alpha1",

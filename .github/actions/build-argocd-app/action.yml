@@ -54,6 +54,10 @@ inputs:
     required: false
     description: auto sync
     default: "true"
+  secret:
+    required: false
+    description: enable secret
+    default: "false"
 outputs:
   app: # id of output
     description: "Argo CD app yaml"

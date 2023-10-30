@@ -12,6 +12,7 @@ interface App {
   kustomize: KustomizeApp;
   image: Image;
   sync: boolean;
+  secret: boolean;
 }
 
 interface Image {
@@ -77,18 +78,9 @@ export const load = (): App => {
       tag: core.getInput("image-tag"),
     },
     sync: core.getBooleanInput("auto-sync"),
+    secret: core.getBooleanInput("secret"),
   };
 };
-
-const plugin = (name: string, cluster: string) => ({
-  name,
-  env: [
-    {
-      name: "AVP_SECRET",
-      value: `guardian:avp-${cluster}`,
-    },
-  ],
-});
 
 export function build(a: App) {
   const ref: any = {
@@ -111,7 +103,6 @@ export function build(a: App) {
     },
     repoURL: a.helm.chart.repoUrl,
     targetRevision: a.helm.chart.version,
-    plugin: plugin("avp-helm", a.cluster),
   };
 
   const kustomize: any = {
@@ -124,7 +115,21 @@ export function build(a: App) {
         "github.com/url": a.repo,
       },
     },
-    plugin: plugin("avp-kustomize", a.cluster),
+  };
+
+  const plugin: any = {
+    repoURL: `https://github.com/${a.repo}`,
+    targetRevision: a.revision,
+    path: a.kustomize.directory,
+    plugin: {
+      name: "avp",
+      env: [
+        {
+          name: "AVP_SECRET",
+          value: `guardian:avp-${a.cluster}`,
+        },
+      ],
+    },
   };
 
   const applicationSources = [];
@@ -136,6 +141,10 @@ export function build(a: App) {
 
   if (a.kustomize.directory !== "") {
     applicationSources.push(kustomize);
+  }
+
+  if (a.secret) {
+    applicationSources.push(plugin);
   }
 
   const application = {

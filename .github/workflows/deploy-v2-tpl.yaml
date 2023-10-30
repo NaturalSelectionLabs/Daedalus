@@ -68,6 +68,11 @@ on:
         required: false
         type: boolean
         default: true
+      secret:
+        description: secret
+        required: false
+        type: boolean
+        default: false
     secrets:
       ACCESS_KEY_ID:
         required: true
@@ -113,6 +118,7 @@ jobs:
           helm-chart-version: ${{ inputs.helm-chart-version }}
           kustomize-dir: ${{ inputs.kustomize-dir }}
           auto-sync: "${{ inputs.auto-sync }}"
+          secret: "${{ inputs.secret }}"
 
       - name: Get the output yaml
         run: echo "${{ steps.argo-cd.outputs.app }}"
