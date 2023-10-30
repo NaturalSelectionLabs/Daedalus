@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install
 
-FROM base as build
+FROM base as builder
 
 WORKDIR /app
 COPY . .
