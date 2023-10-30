@@ -20,7 +20,7 @@ func Execute() {
 
 func init() {
 	rootCmd.AddCommand(
-		serverCmd,
+		//serverCmd,
 		argocdCmd,
 	)
 }
