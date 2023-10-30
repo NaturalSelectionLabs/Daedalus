@@ -86,13 +86,13 @@ export function build(a: App) {
   const helm: any = {
     chart: a.helm.chart.name,
     helm: {
-      ReleaseName: a.helm.releaseName,
-      ValueFiles: a.helm.valueFiles.map(
+      releaseName: a.helm.releaseName,
+      valueFiles: a.helm.valueFiles.map(
         (item) => `$values/${valueFilePathRemovePrefix(item)}`,
       ),
-      Parameters: [
-        { Name: "image.tag", Value: a.image.tag },
-        { Name: "repoUrl", Value: a.repo },
+      parameters: [
+        { name: "image.tag", value: a.image.tag },
+        { name: "repoUrl", value: a.repo },
       ],
     },
     repoURL: a.helm.chart.repoUrl,
@@ -100,12 +100,12 @@ export function build(a: App) {
   };
 
   const kustomize: any = {
-    RepoURL: a.repo,
-    TargetRevision: a.revision,
-    Path: a.kustomize.directory,
-    Kustomize: {
-      Images: [`${a.image.name}:${a.image.tag}`],
-      CommonAnnotations: {
+    repoURL: a.repo,
+    targetRevision: a.revision,
+    path: a.kustomize.directory,
+    kustomize: {
+      images: [`${a.image.name}:${a.image.tag}`],
+      commonAnnotations: {
         "github.com/url": a.repo,
       },
     },

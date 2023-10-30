@@ -92,3 +92,5 @@ jobs:
 
       - name: Get the output yaml
         run: echo "${{ steps.argo-cd.outputs.app }}"
+      - name: Deploy to Argo
+        run: echo "${{ steps.argo-cd.outputs.app }}" | kubectl apply -f -

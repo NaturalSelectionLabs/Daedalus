@@ -29825,23 +29825,23 @@ function build(a) {
     const helm = {
         chart: a.helm.chart.name,
         helm: {
-            ReleaseName: a.helm.releaseName,
-            ValueFiles: a.helm.valueFiles.map((item) => `$values/${valueFilePathRemovePrefix(item)}`),
-            Parameters: [
-                { Name: "image.tag", Value: a.image.tag },
-                { Name: "repoUrl", Value: a.repo },
+            releaseName: a.helm.releaseName,
+            valueFiles: a.helm.valueFiles.map((item) => `$values/${valueFilePathRemovePrefix(item)}`),
+            parameters: [
+                { name: "image.tag", value: a.image.tag },
+                { name: "repoUrl", value: a.repo },
             ],
         },
         repoURL: a.helm.chart.repoUrl,
         targetRevision: a.helm.chart.version,
     };
     const kustomize = {
-        RepoURL: a.repo,
-        TargetRevision: a.revision,
-        Path: a.kustomize.directory,
-        Kustomize: {
-            Images: [`${a.image.name}:${a.image.tag}`],
-            CommonAnnotations: {
+        repoURL: a.repo,
+        targetRevision: a.revision,
+        path: a.kustomize.directory,
+        kustomize: {
+            images: [`${a.image.name}:${a.image.tag}`],
+            commonAnnotations: {
                 "github.com/url": a.repo,
             },
         },
