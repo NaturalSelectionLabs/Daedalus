@@ -63,6 +63,11 @@ on:
         description: "Revsion"
         required: true
         type: string
+      auto-sync:
+        description: auto sync
+        required: false
+        type: boolean
+        default: true
     secrets:
       ACCESS_KEY_ID:
         required: true
@@ -107,6 +112,7 @@ jobs:
           helm-chart-name: ${{ inputs.chart }}
           helm-chart-version: ${{ inputs.helm-chart-version }}
           kustomize-dir: ${{ inputs.kustomize-dir }}
+          auto-sync: "${{ inputs.auto-sync }}"
 
       - name: Get the output yaml
         run: echo "${{ steps.argo-cd.outputs.app }}"

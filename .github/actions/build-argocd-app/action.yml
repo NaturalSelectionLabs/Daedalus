@@ -50,6 +50,10 @@ inputs:
     required: false
     description: kustomize-dir
     default: ""
+  auto-sync:
+    required: false
+    description: auto sync
+    default: "true"
 outputs:
   app: # id of output
     description: "Argo CD app yaml"

@@ -11,6 +11,7 @@ interface App {
   helm: HelmApp;
   kustomize: KustomizeApp;
   image: Image;
+  sync: boolean;
 }
 
 interface Image {
@@ -75,6 +76,7 @@ export const load = (): App => {
       name: core.getInput("image-name"),
       tag: core.getInput("image-tag"),
     },
+    sync: core.getBooleanInput("auto-sync"),
   };
 };
 
@@ -138,6 +140,10 @@ export function build(a: App) {
       },
       project: a.project,
       sources: applicationSources,
+      syncPolicy: {
+        syncOptions: ["ApplyOutOfSyncOnly=true", "ServerSideApply=true"],
+        automated: a.sync ? {} : undefined,
+      },
     },
   };
 
