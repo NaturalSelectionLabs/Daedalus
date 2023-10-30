@@ -146,7 +146,6 @@ export function build(a: App) {
 export function toYaml(a: App): string {
   const jsonData = JSON.stringify(build(a), null, 2);
   const data = JSON.parse(jsonData);
-  console.log(yaml.dump(data));
 
   // delete data.metadata.creationTimestamp;
   // delete data.status;

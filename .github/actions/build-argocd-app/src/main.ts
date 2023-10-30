@@ -8,11 +8,10 @@ import * as app from "./app";
 export async function run(): Promise<void> {
   try {
     const a = app.load();
-    core.debug(JSON.stringify(a));
-    core.debug(`Yaml: ${app.toYaml(a)}`);
 
     // Set outputs for other workflow steps to use
     core.setOutput("time", new Date().toTimeString());
+    core.setOutput("app", app.toYaml(a));
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message);

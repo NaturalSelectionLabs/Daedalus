@@ -29876,7 +29876,6 @@ exports.build = build;
 function toYaml(a) {
     const jsonData = JSON.stringify(build(a), null, 2);
     const data = JSON.parse(jsonData);
-    console.log(yaml.dump(data));
     // delete data.metadata.creationTimestamp;
     // delete data.status;
     return yaml.dump(data);
@@ -29928,10 +29927,9 @@ const app = __importStar(__nccwpck_require__(396));
 async function run() {
     try {
         const a = app.load();
-        core.debug(JSON.stringify(a));
-        core.debug(`Yaml: ${app.toYaml(a)}`);
         // Set outputs for other workflow steps to use
         core.setOutput("time", new Date().toTimeString());
+        core.setOutput("app", app.toYaml(a));
     }
     catch (error) {
         // Fail the workflow run if an error occurs
