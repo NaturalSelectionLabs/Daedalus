@@ -80,7 +80,7 @@ jobs:
 
       - name: Build Argo CD Application
         id: argo-cd
-        uses: ./github/actions/build-argocd-app
+        uses: ./.github/actions/build-argocd-app
 
       - name: Get the output yaml
         run: echo "${{ steps.argo-cd.outputs.app }}"
