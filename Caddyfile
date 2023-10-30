@@ -1,0 +1,6 @@
+:3000 {
+	encode gzip
+	root * /usr/share/caddy/html
+    file_server
+	try_files {path} /index.html
+}
