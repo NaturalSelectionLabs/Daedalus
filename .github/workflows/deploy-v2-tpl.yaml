@@ -81,6 +81,8 @@ jobs:
       - name: Build Argo CD Application
         id: argo-cd
         uses: ./.github/actions/build-argocd-app
+        env:
+          DAEDALUS_CLUSTER: ${{ inputs.cluster }}
 
       - name: Get the output yaml
         run: echo "${{ steps.argo-cd.outputs.app }}"
