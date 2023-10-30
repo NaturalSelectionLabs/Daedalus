@@ -6,7 +6,7 @@
 /ui/.pnp.js
 /ui/build
 
-/pkg/server/dist
+/.github/actions/build-argocd-app/pkg/server/dist
 
 # testing
 /coverage

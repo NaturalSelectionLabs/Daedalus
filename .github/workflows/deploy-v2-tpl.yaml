@@ -79,9 +79,9 @@ jobs:
 
 
       - name: Build Argo CD Application
-        id: argocd
-        uses: NaturalSelectionLabs/Daedalus@main
+        id: argo-cd
+        uses: ./github/actions/build-argocd-app
 
       - name: Get the output yaml
-        run: echo "${{ steps.argocd.outouts.app }}"
+        run: echo "${{ steps.argo-cd.outputs.app }}"
 
