@@ -117,13 +117,12 @@ export function build(a: App) {
 
   if (a.helm.valueFiles.length > 0) {
     applicationSources.push(helm);
+    applicationSources.push(ref);
   }
 
   if (a.kustomize.directory !== "") {
     applicationSources.push(kustomize);
   }
-
-  applicationSources.push(ref);
 
   const application = {
     apiVersion: "argoproj.io/v1alpha1",
