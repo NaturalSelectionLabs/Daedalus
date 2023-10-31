@@ -29775,17 +29775,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.toYaml = exports.build = exports.load = void 0;
 const yaml = __importStar(__nccwpck_require__(1917));
 const core = __importStar(__nccwpck_require__(2186));
-const valueFilePathRemovePrefix = (inputPath) => {
-    if (inputPath.startsWith("./")) {
-        return inputPath.slice(2);
-    }
-    else if (inputPath.startsWith("/")) {
-        return inputPath.slice(1);
-    }
-    else {
-        return inputPath;
-    }
-};
 const load = () => {
     const name = core.getInput("name");
     const namespace = core.getInput("namespace");
@@ -29800,61 +29789,20 @@ const load = () => {
         project,
         repo,
         revision,
-        helm: {
-            valueFiles: core.getMultilineInput("helm-value-files"),
-            releaseName: core.getInput("helm-release-name") || name,
-            chart: {
-                repoUrl: core.getInput("helm-chart-url"),
-                name: core.getInput("helm-chart-name"),
-                version: core.getInput("helm-chart-version"),
-            },
-        },
-        kustomize: {
-            directory: core.getInput("kustomize-dir"),
-        },
+        directory: core.getInput("dir"),
         image: {
             name: core.getInput("image-name"),
             tag: core.getInput("image-tag"),
         },
         sync: core.getBooleanInput("auto-sync"),
-        secret: core.getBooleanInput("secret"),
     };
 };
 exports.load = load;
 function build(a) {
-    const ref = {
-        ref: "values",
-        repoURL: `https://github.com/${a.repo}`,
-        targetRevision: a.revision,
-    };
-    const helm = {
-        chart: a.helm.chart.name,
-        helm: {
-            releaseName: a.helm.releaseName,
-            valueFiles: a.helm.valueFiles.map((item) => `\\\$values/${valueFilePathRemovePrefix(item)}`),
-            parameters: [
-                { name: "image.tag", value: a.image.tag },
-                { name: "repoUrl", value: a.repo },
-            ],
-        },
-        repoURL: a.helm.chart.repoUrl,
-        targetRevision: a.helm.chart.version,
-    };
-    const kustomize = {
-        repoURL: `https://github.com/${a.repo}`,
-        targetRevision: a.revision,
-        path: a.kustomize.directory,
-        kustomize: {
-            images: [`${a.image.name}:${a.image.tag}`],
-            commonAnnotations: {
-                "github.com/url": a.repo,
-            },
-        },
-    };
     const plugin = {
         repoURL: `https://github.com/${a.repo}`,
         targetRevision: a.revision,
-        path: a.kustomize.directory,
+        path: a.directory,
         plugin: {
             name: "avp",
             env: [
@@ -29862,20 +29810,21 @@ function build(a) {
                     name: "AVP_SECRET",
                     value: `guardian:avp-${a.cluster}`,
                 },
+                {
+                    name: "APP_REPO",
+                    value: a.repo,
+                },
+                {
+                    name: "IMAGE_NAME",
+                    value: a.image.name,
+                },
+                {
+                    name: "IMAGE_TAG",
+                    value: a.image.tag,
+                },
             ],
         },
     };
-    const applicationSources = [];
-    if (a.helm.valueFiles.length > 0) {
-        applicationSources.push(helm);
-        applicationSources.push(ref);
-    }
-    if (a.kustomize.directory !== "") {
-        applicationSources.push(kustomize);
-    }
-    if (a.secret) {
-        applicationSources.push(plugin);
-    }
     const application = {
         apiVersion: "argoproj.io/v1alpha1",
         kind: "Application",
@@ -29889,7 +29838,7 @@ function build(a) {
                 name: a.cluster,
             },
             project: a.project,
-            sources: applicationSources,
+            source: plugin,
             syncPolicy: {
                 syncOptions: ["ApplyOutOfSyncOnly=true", "ServerSideApply=true"],
                 automated: a.sync ? {} : undefined,
@@ -29907,9 +29856,6 @@ function toYaml(a) {
     return yaml.dump(data);
 }
 exports.toYaml = toYaml;
-function imageNameString(i) {
-    return `${i.name}:${i.tag}`;
-}
 
 
 /***/ }),

@@ -26,38 +26,13 @@ inputs:
   image-tag:
     required: true
     description: image tag
-  helm-value-files:
-    required: false
-    description: helm values files
-    default: ""
-  helm-release-name:
-    required: false
-    description: helm release name
-    default: ""
-  helm-chart-url:
-    required: false
-    description: helm chart url
-    default: "https://naturalselectionlabs.github.io/helm-charts"
-  helm-chart-name:
-    required: false
-    description: helm chart name
-    default: "web-app"
-  helm-chart-version:
-    required: false
-    description: helm chart version
-    default: "x.x.x"
-  kustomize-dir:
-    required: false
-    description: kustomize-dir
-    default: ""
+  dir:
+    required: true
+    description: dir
   auto-sync:
     required: false
     description: auto sync
     default: "true"
-  secret:
-    required: false
-    description: enable secret
-    default: "false"
 outputs:
   app: # id of output
     description: "Argo CD app yaml"

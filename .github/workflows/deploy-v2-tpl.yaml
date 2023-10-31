@@ -28,35 +28,7 @@ on:
         description: "The release name"
         required: true
         type: string
-      chart:
-        description: "Helm chart"
-        required: false
-        type: string
-        default: web-app
-      overrideFiles:
-        description: "Override files"
-        required: false
-        type: string
-        default: ""
-      overrides:
-        description: "Override values"
-        required: false
-        type: string
-      helm-chart-version:
-        description: Helm Chart version
-        required: false
-        default: x.x.x
-        type: string
-      repoUrl:
-        description: "Helm repo url"
-        required: false
-        type: string
-        default: "https://naturalselectionlabs.github.io/helm-charts"
-      kustomize-dir:
-        required: false
-        type: string
-      manifests:
-        description: "Manifests"
+      dir:
         required: false
         type: string
       revision:
@@ -68,11 +40,6 @@ on:
         required: false
         type: boolean
         default: true
-      secret:
-        description: secret
-        required: false
-        type: boolean
-        default: false
     secrets:
       ACCESS_KEY_ID:
         required: true
@@ -111,14 +78,9 @@ jobs:
           revision: ${{ inputs.revision }}
           image-name: ${{ inputs.images }}
           image-tag: ${{ inputs.tag }}
-          helm-value-files: ${{ inputs.overrideFiles }}
           helm-release-name: ${{ inputs.releaseName }}
-          helm-chart-url: ${{ inputs.repoUrl }}
-          helm-chart-name: ${{ inputs.chart }}
-          helm-chart-version: ${{ inputs.helm-chart-version }}
-          kustomize-dir: ${{ inputs.kustomize-dir }}
+          dir: ${{ inputs.dir }}
           auto-sync: "${{ inputs.auto-sync }}"
-          secret: "${{ inputs.secret }}"
 
       - name: Get the output yaml
         run: echo "${{ steps.argo-cd.outputs.app }}"

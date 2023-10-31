@@ -44,11 +44,9 @@ jobs:
       tag: sha-${{ github.sha }}
       cluster: dev
       namespace: guardian
-      chart: web-app
       releaseName: daedalus
       revision: main
-      overrideFiles: |
-        deploy/dev/values.yaml
+      dir: deploy/dev
     secrets: inherit
 #  deploy-prod:
 #    if: startsWith(github.ref, 'refs/tags/v')
