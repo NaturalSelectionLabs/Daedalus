@@ -29804,7 +29804,7 @@ function build(a) {
         targetRevision: a.revision,
         path: a.directory,
         plugin: {
-            name: "avp",
+            name: "avp-kustomize",
             env: [
                 {
                     name: "AVP_SECRET",
