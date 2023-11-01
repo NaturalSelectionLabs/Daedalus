@@ -22,16 +22,14 @@ on:
         required: false
         type: string
         default: linux/amd64
-      build-args:
-        description: "Docker build args"
-        required: false
-        type: string
-        default: ""
     secrets:
       DOCKERHUB_USERNAME:
         required: true
       DOCKERHUB_TOKEN:
         required: true
+      PERSONAL_ACCESS_TOKEN:
+        required: false
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -79,7 +77,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: ${{ inputs.platforms }}
-          build-args: ${{ inputs.build-args }}
+          build-args: |
+            "GH_USER=git"
+            "GH_TOKEN=${{ secrets.PERSONAL_ACCESS_TOKEN }}"
 
       - name: Docker Hub Description
         uses: peter-evans/dockerhub-description@v3
