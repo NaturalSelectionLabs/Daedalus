@@ -78,7 +78,6 @@ jobs:
           revision: ${{ inputs.revision }}
           image-name: ${{ inputs.images }}
           image-tag: ${{ inputs.tag }}
-          helm-release-name: ${{ inputs.releaseName }}
           dir: ${{ inputs.dir }}
           auto-sync: "${{ inputs.auto-sync }}"
 
