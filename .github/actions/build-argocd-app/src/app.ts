@@ -84,12 +84,13 @@ export function build(a: App) {
       },
       project: a.project,
       source: plugin,
-      automated: {
-        prune: true,
-      },
       syncPolicy: {
         syncOptions: ["ApplyOutOfSyncOnly=true", "ServerSideApply=true"],
-        automated: a.sync ? {} : undefined,
+        automated: a.sync
+          ? {
+              prune: true,
+            }
+          : undefined,
       },
     },
   };
