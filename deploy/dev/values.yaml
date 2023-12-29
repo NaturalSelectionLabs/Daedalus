@@ -4,9 +4,9 @@ image:
 workload:
   name: daedalus
 
-envFrom:
-  - secretRef:
-      name: daedalus
+# envFrom:
+#   - secretRef:
+#       name: daedalus
 
 ingressRoute:
   enabled: true
