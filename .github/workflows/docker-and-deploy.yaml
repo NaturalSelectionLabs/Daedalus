@@ -48,6 +48,19 @@ jobs:
       revision: main
       dir: deploy/dev
     secrets: inherit
+  deploy-v3-dev:
+    uses: NaturalSelectionLabs/Daedalus/.github/workflows/deploy-v3-tpl.yaml@main
+    needs:
+      - build
+    with:
+      images: rss3/daedalus
+      tag: sha-${{ github.sha }}
+      cluster: dev
+      namespace: guardian
+      releaseName: daedalus
+      revision: main
+      dir: deploy/dev
+    secrets: inherit
 #  deploy-prod:
 #    if: startsWith(github.ref, 'refs/tags/v')
 #    uses: NaturalSelectionLabs/Daedalus/.github/workflows/deploy-tpl.yaml@main

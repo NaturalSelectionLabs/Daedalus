@@ -1,0 +1,89 @@
+# deploy to kubernetes workflow
+name: Deploy to Kubernetes
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: "Kubectl version"
+        default: "latest"
+        required: false
+        type: string
+      cluster:
+        description: "Kubernetes cluster"
+        required: true
+        type: string
+      namespace:
+        description: "Kubernetes cluster namespace"
+        required: true
+        type: string
+      images:
+        description: "The image name"
+        required: true
+        type: string
+      tag:
+        description: "The image tag"
+        required: true
+        type: string
+      releaseName:
+        description: "The release name"
+        required: true
+        type: string
+      dir:
+        required: false
+        type: string
+      revision:
+        description: "Revsion"
+        required: true
+        type: string
+      auto-sync:
+        description: auto sync
+        required: false
+        type: boolean
+        default: true
+    secrets:
+      GOOGLE_CREDENTIALS:
+        required: true
+env:
+  REGION_ID: us-central1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - id: "auth"
+        uses: "google-github-actions/auth@v2"
+        with:
+          credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
+
+      - id: "get-credentials"
+        uses: "google-github-actions/get-gke-credentials@v2"
+        with:
+          cluster_name: "${{ env.REGION_ID }}-${{ inputs.cluster }}"
+          location: "us-central1-a"
+
+      - uses: azure/setup-kubectl@v3
+        with:
+          version: ${{ inputs.version }} # default is latest stable
+        id: install
+
+      - name: Build Argo CD Application
+        id: argo-cd
+        uses: NaturalSelectionLabs/Daedalus/.github/actions/build-argocd-app@main
+        with:
+          name: ${{ inputs.releaseName }}
+          namespace: ${{ inputs.namespace }}
+          cluster: ${{ inputs.cluster }}
+          repo: ${{ github.repository }}
+          revision: ${{ inputs.revision }}
+          image-name: ${{ inputs.images }}
+          image-tag: ${{ inputs.tag }}
+          dir: ${{ inputs.dir }}
+          auto-sync: "${{ inputs.auto-sync }}"
+
+      - name: Get the output yaml
+        run: echo "${{ steps.argo-cd.outputs.app }}"
+      - name: Deploy to Argo
+        run: echo "${{ steps.argo-cd.outputs.app }}" | kubectl apply -f -
