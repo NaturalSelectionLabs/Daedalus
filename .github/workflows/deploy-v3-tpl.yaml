@@ -61,8 +61,8 @@ jobs:
       - id: "get-credentials"
         uses: "google-github-actions/get-gke-credentials@v2"
         with:
-          cluster_name: "${{ env.REGION_ID }}-${{ inputs.cluster }}"
-          location: "us-central1"
+          cluster_name: "us-central1-prod"
+          location: "${{ env.REGION_ID }}"
 
       - uses: azure/setup-kubectl@v3
         with:
