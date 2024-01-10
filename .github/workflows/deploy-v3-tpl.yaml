@@ -72,6 +72,8 @@ jobs:
           --plugin-env APP_REPO=${{ github.repository }} \
           --plugin-env IMAGE_NAME=${{ inputs.images }} \
           --plugin-env IMAGE_TAG=${{ inputs.tag }} \
+          --sync-policy automated \
+          --sync-option ApplyOutOfSyncOnly=true,ServerSideApply=true \
           --upsert
       - name: Get app info
         run: argocd app get ${{ env.APP_NAME }}
