@@ -41,49 +41,37 @@ on:
         type: boolean
         default: true
     secrets:
-      GOOGLE_CREDENTIALS:
+      ARGOCD_TOKEN:
         required: true
 env:
-  REGION_ID: us-central1
-
+  ARGOCD_SERVER: argocd.naturalselectionlabs.com:443
+  ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_TOKEN }}
+  ARGOCD_OPTS: "--grpc-web"
+  APP_NAME: ${{ inputs.releaseName }}-${{ inputs.cluster }}
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-
-      - id: "auth"
-        uses: "google-github-actions/auth@v2"
+        uses: actions/checkout@v4
+      - name: Setup ArgoCD CLI
+        uses: imajeetyadav/argocd-cli@v1
         with:
-          credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
-
-      - id: "get-credentials"
-        uses: "google-github-actions/get-gke-credentials@v2"
-        with:
-          cluster_name: "us-central1-prod"
-          location: "${{ env.REGION_ID }}"
-
-      - uses: azure/setup-kubectl@v3
-        with:
-          version: ${{ inputs.version }} # default is latest stable
-        id: install
-
-      - name: Build Argo CD Application
-        id: argo-cd
-        uses: NaturalSelectionLabs/Daedalus/.github/actions/build-argocd-app@main
-        with:
-          name: ${{ inputs.releaseName }}
-          namespace: ${{ inputs.namespace }}
-          cluster: ${{ inputs.cluster }}
-          repo: ${{ github.repository }}
-          revision: ${{ inputs.revision }}
-          image-name: ${{ inputs.images }}
-          image-tag: ${{ inputs.tag }}
-          dir: ${{ inputs.dir }}
-          auto-sync: "${{ inputs.auto-sync }}"
-
-      - name: Get the output yaml
-        run: echo "${{ steps.argo-cd.outputs.app }}"
+          version: v2.9.3 # optional
       - name: Deploy to Argo
-        run: echo "${{ steps.argo-cd.outputs.app }}" | kubectl apply -f -
+        run: |
+          argocd app create ${{ env.APP_NAME }} \
+          --repo https://github.com/${{ github.repository }} \
+          --path ${{ inputs.dir }} \
+          --project ${{ inputs.namespace }} \
+          --dest-name ${{ inputs.cluster }} \
+          --dest-namespace ${{ inputs.namespace }} \
+          --config-management-plugin=avp-kustomize \
+          --revision ${{ inputs.revision }} \
+          --plugin-env AVP_SECRET=guardian:avp-${{ inputs.cluster }} \
+          --plugin-env APP_REPO=${{ github.repository }} \
+          --plugin-env IMAGE_NAME=${{ inputs.images }} \
+          --plugin-env IMAGE_TAG=${{ inputs.tag }} \
+          --upsert
+      - name: Wait until app healthy
+        run: argocd app wait daedalus-dev
