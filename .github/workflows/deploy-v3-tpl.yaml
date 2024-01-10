@@ -60,7 +60,7 @@ jobs:
           version: v2.9.3 # optional
       - name: Deploy to Argo
         run: |
-          argocd app create ${{ env.APP_NAME }} \
+          argocd app create    \
           --repo https://github.com/${{ github.repository }} \
           --path ${{ inputs.dir }} \
           --project ${{ inputs.namespace }} \
@@ -73,5 +73,5 @@ jobs:
           --plugin-env IMAGE_NAME=${{ inputs.images }} \
           --plugin-env IMAGE_TAG=${{ inputs.tag }} \
           --upsert
-      - name: Wait until app healthy
-        run: argocd app wait daedalus-dev
+      - name: Get app info
+        run: argocd app get ${{ env.APP_NAME }}
