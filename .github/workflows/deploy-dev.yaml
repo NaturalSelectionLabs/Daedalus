@@ -2,37 +2,15 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - main
+      - dev
     tags:
       - v*
 jobs:
-  build:
-    uses: NaturalSelectionLabs/Daedalus/.github/workflows/docker-tpl.yaml@main
-    with:
-      images: rss3/daedalus
-      context: .
-      dockerfile: ./Dockerfile
-    secrets: inherit
-  deploy-v2-dev:
-    uses: NaturalSelectionLabs/Daedalus/.github/workflows/deploy-v2-tpl.yaml@main
-    needs:
-      - build
-    with:
-      images: rss3/daedalus
-      tag: sha-${{ github.sha }}
-      cluster: dev
-      namespace: guardian
-      releaseName: daedalus
-      revision: main
-      dir: deploy/dev
-    secrets: inherit
   deploy-v3-dev:
-    uses: NaturalSelectionLabs/Daedalus/.github/workflows/deploy-v3-tpl.yaml@main
-    needs:
-      - build
+    uses: NaturalSelectionLabs/Daedalus/.github/workflows/deploy-v3-tpl.yaml@dev
     with:
       images: rss3/daedalus
-      tag: sha-${{ github.sha }}
+      tag: latest
       cluster: dev
       namespace: guardian
       releaseName: daedalus
