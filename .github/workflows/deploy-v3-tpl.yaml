@@ -40,11 +40,16 @@ on:
         required: false
         type: boolean
         default: true
+      argocd-server:
+        description: default server
+        required: false
+        type: string
+        default: argocd.naturalselectionlabs.com:443
     secrets:
       ARGOCD_TOKEN:
         required: true
 env:
-  ARGOCD_SERVER: argocd.naturalselectionlabs.com:443
+  ARGOCD_SERVER: ${{ inputs.argocd-server }}
   ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_TOKEN }}
   ARGOCD_OPTS: "--grpc-web"
   APP_NAME: ${{ inputs.releaseName }}-${{ inputs.cluster }}
