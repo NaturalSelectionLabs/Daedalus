@@ -66,8 +66,8 @@ dependencies:
     specifier: ^4.9.5
     version: 4.9.5
   web-vitals:
-    specifier: ^2.1.4
-    version: 2.1.4
+    specifier: ^4.0.1
+    version: 4.0.1
 
 devDependencies:
   '@types/js-yaml':
@@ -2256,8 +2256,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /web-vitals@2.1.4:
-    resolution: {integrity: sha512-sVWcwhU5mX6crfI5Vd2dC4qchyTqxV8URinzt25XqVh+bHEPGH4C3NPrNionCP7Obx59wrYEbNlw4Z8sjALzZg==}
+  /web-vitals@4.0.1:
+    resolution: {integrity: sha512-AW6qT/vXK3pbf+WgVcEBXY//AWCpXjVKgdb6rt0cARSUdtT+NUtZCOeo+CSLUX7PjSQ275DmxfkAs7QlPbtR6w==}
     dev: false
 
   /which-boxed-primitive@1.0.2:
