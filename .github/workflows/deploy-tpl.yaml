@@ -104,7 +104,7 @@ jobs:
         id: bake
 
       - name: Deploy to Kubernetes
-        uses: azure/k8s-deploy@v4
+        uses: azure/k8s-deploy@v5
         with:
           namespace: "${{ inputs.namespace }}"
           images: ${{ inputs.images }}:${{ inputs.tag }}
