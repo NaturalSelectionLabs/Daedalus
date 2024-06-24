@@ -63,8 +63,8 @@ dependencies:
     specifier: ^6.10.0
     version: 6.10.0(react-dom@18.2.0)(react@18.2.0)
   typescript:
-    specifier: ^4.9.5
-    version: 4.9.5
+    specifier: ^5.5.2
+    version: 5.5.2
   web-vitals:
     specifier: ^2.1.4
     version: 2.1.4
@@ -84,7 +84,7 @@ devDependencies:
     version: 3.2.0(vite@4.4.8)
   vite-tsconfig-paths:
     specifier: ^4.2.0
-    version: 4.2.0(typescript@4.9.5)(vite@4.4.8)
+    version: 4.2.0(typescript@5.5.2)(vite@4.4.8)
 
 packages:
 
@@ -2160,7 +2160,7 @@ packages:
     resolution: {integrity: sha512-/OaKK0xYrs3DmxRYqL/yDc+FxFUVYhDlXMhRmv3z915w2HF1tnN1omB354j8VUGO/hbRzyD6Y3sA7v7GS/ceog==}
     engines: {node: '>=4'}
 
-  /tsconfck@2.1.2(typescript@4.9.5):
+  /tsconfck@2.1.2(typescript@5.5.2):
     resolution: {integrity: sha512-ghqN1b0puy3MhhviwO2kGF8SeMDNhEbnKxjK7h6+fvY9JAxqvXi8y5NAHSQv687OVboS2uZIByzGd45/YxrRHg==}
     engines: {node: ^14.13.1 || ^16 || >=18}
     hasBin: true
@@ -2170,12 +2170,12 @@ packages:
       typescript:
         optional: true
     dependencies:
-      typescript: 4.9.5
+      typescript: 5.5.2
     dev: true
 
-  /typescript@4.9.5:
-    resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
-    engines: {node: '>=4.2.0'}
+  /typescript@5.5.2:
+    resolution: {integrity: sha512-NcRtPEOsPFFWjobJEtfihkLCZCXZt/os3zf8nTxjVH3RvTSxjrCamJpbExGvYOF+tFHc3pA65qpdwPbzjohhew==}
+    engines: {node: '>=14.17'}
     hasBin: true
 
   /update-browserslist-db@1.0.11(browserslist@4.21.10):
@@ -2203,7 +2203,7 @@ packages:
       - supports-color
     dev: true
 
-  /vite-tsconfig-paths@4.2.0(typescript@4.9.5)(vite@4.4.8):
+  /vite-tsconfig-paths@4.2.0(typescript@5.5.2)(vite@4.4.8):
     resolution: {integrity: sha512-jGpus0eUy5qbbMVGiTxCL1iB9ZGN6Bd37VGLJU39kTDD6ZfULTTb1bcc5IeTWqWJKiWV5YihCaibeASPiGi8kw==}
     peerDependencies:
       vite: '*'
@@ -2213,7 +2213,7 @@ packages:
     dependencies:
       debug: 4.3.4
       globrex: 0.1.2
-      tsconfck: 2.1.2(typescript@4.9.5)
+      tsconfck: 2.1.2(typescript@5.5.2)
       vite: 4.4.8(@types/node@16.18.23)
     transitivePeerDependencies:
       - supports-color
