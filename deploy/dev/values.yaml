@@ -3,6 +3,7 @@ image:
 
 workload:
   name: daedalus
+  replicas: 0
 
 # envFrom:
 #   - secretRef:
